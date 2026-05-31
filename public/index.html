@@ -1,1 +1,33 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imperium TV - Teste Grátis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>🛸 IMPERIUM TV</h1>
+  <p>Teste Grátis 12 Horas</p>
+
+  <form id="formTeste">
+    <input type="text" id="nomeCliente" placeholder="Seu nome" required>
+    <input type="text" id="whatsapp" placeholder="WhatsApp" required>
+
+    <select id="tipoTeste">
+      <option value="sem_adulto">Sem Adulto</option>
+      <option value="com_adulto">Com Adulto 🔞</option>
+    </select>
+
+    <button type="submit">GERAR TESTE</button>
+  </form>
+
+  <div id="resultado"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
