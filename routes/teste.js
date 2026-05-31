@@ -1,60 +1,71 @@
-
 const express = require('express');
 const router = express.Router();
 
-const { gerarTeste } = require('../services/netplay');
+const { gerarTesteNetplay, limparWhatsapp } = require('../services/netplay');
 const { enviarWhatsapp } = require('../services/evolution');
 
-router.post('/', async (req,res)=>{
+router.post('/', async (req, res) => {
+  try {
+    const { nomeCliente, whatsapp, tipoTeste } = req.body;
 
-    try{
+    const whatsappLimpo = limparWhatsapp(whatsapp);
 
-        const { nome, whatsapp, tipoTeste } = req.body;
-
-        const retorno = await gerarTeste(
-            nome,
-            whatsapp,
-            tipoTeste
-        );
-
-        const username = retorno.username;
-        const password = retorno.password;
-
-        if(!username || !password){
-
-            return res.json({
-                success:false,
-                mensagem:'Você já realizou o teste.'
-            });
-
-        }
-
-        const texto = `
-*TESTE GERADO COM SUCESSO*
-
-Usuário: ${username}
-Senha: ${password}
-`;
-
-        await enviarWhatsapp(
-            whatsapp,
-            texto
-        );
-
-        return res.json({
-            success:true,
-            mensagem:'Confira seu WhatsApp.'
-        });
-
-    }catch(err){
-
-        return res.json({
-            success:false,
-            mensagem:'Erro ao gerar teste.'
-        });
-
+    if (!whatsappLimpo) {
+      return res.json({
+        success: false,
+        mensagem: 'Informe seu WhatsApp para gerar o teste.'
+      });
     }
 
+    const { dados } = await gerarTesteNetplay({
+      nomeCliente,
+      whatsapp,
+      tipoTeste
+    });
+
+    const username = dados.username || (dados.dados && dados.dados.username);
+    const password = dados.password || (dados.dados && dados.dados.password);
+    const dns = dados.dns || 'http://galaxy.blcplay.com';
+    const validade = dados.expiresAtFormatted || dados.validade || '12 Horas';
+
+    if (!username || !password) {
+      return res.json({
+        success: false,
+        mensagem: 'VOCÊ JÁ REALIZOU O TESTE!'
+      });
+    }
+
+    const texto = `🛸 *TESTE GERADO COM SUCESSO!*
+
+👤 *Usuário:* ${username}
+🔑 *Senha:* ${password}
+
+⏳ *Validade:* ${validade}
+
+🌐 *DNS/URL:* ${dns}`;
+
+    const enviado = await enviarWhatsapp(whatsappLimpo, texto);
+
+    return res.json({
+      success: true,
+      mensagem: enviado
+        ? 'TESTE GERADO COM SUCESSO! Confira seu WhatsApp.'
+        : 'TESTE GERADO COM SUCESSO! WhatsApp ainda não configurado.',
+      dados: {
+        username,
+        password,
+        dns,
+        validade
+      }
+    });
+  } catch (error) {
+    console.error('Erro ao gerar teste:', error.message);
+
+    return res.json({
+      success: false,
+      mensagem: 'Erro ao gerar teste. Tente novamente.'
+    });
+  }
 });
 
 module.exports = router;
