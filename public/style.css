@@ -1,1 +1,44 @@
 
+body{
+  background:#111827;
+  color:white;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.container{
+  max-width:500px;
+  margin:50px auto;
+  padding:30px;
+  background:#1f2937;
+  border-radius:10px;
+}
+
+h1{
+  text-align:center;
+}
+
+p{
+  text-align:center;
+}
+
+input,
+select,
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:6px;
+  box-sizing:border-box;
+}
+
+button{
+  background:#22c55e;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#resultado{
+  margin-top:20px;
+}
