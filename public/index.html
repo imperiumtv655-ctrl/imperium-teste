@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -11,21 +10,53 @@
 
 <div class="container">
   <h1>🛸 IMPERIUM TV</h1>
-  <p>Teste Grátis 12 Horas</p>
+  <p class="subtitulo">Teste Grátis 12 Horas</p>
 
-  <form id="formTeste">
-    <input type="text" id="nomeCliente" placeholder="Seu nome" required>
-    <input type="text" id="whatsapp" placeholder="WhatsApp" required>
+  <section id="telaDispositivos">
+    <h2>📺 Escolha seu dispositivo</h2>
 
-    <select id="tipoTeste">
-      <option value="sem_adulto">Sem Adulto</option>
-      <option value="com_adulto">Com Adulto 🔞</option>
-    </select>
+    <div class="grid-dispositivos" id="listaDispositivos"></div>
+  </section>
 
-    <button type="submit">GERAR TESTE</button>
-  </form>
+  <section id="telaTutorial" class="hidden">
+    <button class="btn-voltar" onclick="voltarDispositivos()">← Voltar</button>
 
-  <div id="resultado"></div>
+    <div id="conteudoTutorial"></div>
+
+    <button class="btn-secundario" onclick="mostrarRegiao()">
+      ❌ Não encontrei o aplicativo
+    </button>
+
+    <button class="btn-principal" onclick="mostrarFormulario()">
+      ✅ Já instalei o aplicativo
+    </button>
+  </section>
+
+  <section id="telaRegiao" class="hidden">
+    <button class="btn-voltar" onclick="voltarTutorial()">← Voltar ao tutorial</button>
+    <div id="conteudoRegiao"></div>
+  </section>
+
+  <section id="telaFormulario" class="hidden">
+    <button class="btn-voltar" onclick="voltarTutorial()">← Voltar ao tutorial</button>
+
+    <h2>✅ Agora vamos gerar seu teste</h2>
+    <p>Preencha seus dados abaixo para receber o usuário e senha no WhatsApp.</p>
+
+    <form id="formTeste">
+      <input type="text" id="nomeCliente" placeholder="Seu nome" required>
+      <input type="text" id="whatsapp" placeholder="WhatsApp" required>
+
+      <select id="tipoTeste">
+        <option value="sem_adulto">Sem Adulto</option>
+        <option value="com_adulto">Com Adulto 🔞</option>
+      </select>
+
+      <button type="submit">GERAR TESTE</button>
+    </form>
+
+    <div id="resultado"></div>
+  </section>
 </div>
 
 <script src="app.js"></script>
