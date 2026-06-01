@@ -4,40 +4,65 @@ module.exports = {
   icone: '📺',
   app: 'IB Player Pro',
 
-  modelos: [
-    'TV Samsung Smart',
-    'Samsung Tizen',
-    'Samsung Crystal',
-    'Samsung QLED',
-    'Samsung Neo QLED'
-  ],
-
-  titulo: 'Tutorial para Samsung TV',
-
-  introducao:
-    'Antes de gerar seu teste, primeiro precisamos instalar o aplicativo correto na sua TV. O aplicativo se chama IB Player Pro.',
-
   passos: [
-    'Pegue o controle da sua TV Samsung.',
-    'Aperte o botão Início do controle. Normalmente ele tem o desenho de uma casinha 🏠.',
-    'Na tela da TV, procure e abra a opção Apps.',
-    'Dentro de Apps, vá na lupa de pesquisa 🔍.',
-    'Digite exatamente: IB Player Pro.',
-    'Quando aparecer o aplicativo, clique em Instalar.',
-    'Depois de instalar, abra o aplicativo e deixe ele aberto.'
+    {
+      titulo: 'Passo 1',
+      texto: 'Pegue o controle da sua TV Samsung.'
+    },
+    {
+      titulo: 'Passo 2',
+      texto: 'Aperte o botão Início do controle. Normalmente esse botão tem o desenho de uma casinha 🏠.'
+    },
+    {
+      titulo: 'Passo 3',
+      texto: 'Na tela da TV, procure e abra a opção Apps. Essa é a loja de aplicativos da Samsung.'
+    },
+    {
+      titulo: 'Passo 4',
+      texto: 'Dentro de Apps, vá até a lupa de pesquisa 🔍.'
+    },
+    {
+      titulo: 'Passo 5',
+      texto: 'Digite exatamente: IB Player Pro.'
+    },
+    {
+      titulo: 'Passo 6',
+      texto: 'Quando aparecer o aplicativo IB Player Pro, clique em Instalar.'
+    },
+    {
+      titulo: 'Passo 7',
+      texto: 'Depois de instalar, abra o aplicativo e deixe ele aberto na tela da TV.'
+    }
   ],
-
-  regiaoTitulo: 'Não encontrou o aplicativo?',
-  regiaoTexto:
-    'Isso pode acontecer porque algumas TVs Samsung estão configuradas em uma região onde o aplicativo não aparece. Nesse caso, será necessário alterar a região da TV.',
 
   regiaoPassos: [
-    'Vá em Configurações > Geral > Restaurar.',
-    'Digite a senha padrão: 0000.',
-    'Quando aparecer a tela de Termos e Condições, pare e não clique em nada.',
-    'No controle, pressione: MUDO > VOL+ > CANAL+ > MUDO.',
-    'Escolha Estados Unidos ou México.',
-    'Finalize a configuração da TV.',
-    'Volte na loja Apps e procure novamente por IB Player Pro.'
+    {
+      titulo: 'Região - Passo 1',
+      texto: 'Se o aplicativo não aparecer, será necessário alterar a região da TV Samsung.'
+    },
+    {
+      titulo: 'Região - Passo 2',
+      texto: 'Vá em Configurações > Geral > Restaurar.'
+    },
+    {
+      titulo: 'Região - Passo 3',
+      texto: 'Digite a senha padrão: 0000.'
+    },
+    {
+      titulo: 'Região - Passo 4',
+      texto: 'Quando aparecer a tela de Termos e Condições, pare e não clique em nada.'
+    },
+    {
+      titulo: 'Região - Passo 5',
+      texto: 'No controle, pressione nesta ordem: MUDO > VOL+ > CANAL+ > MUDO.'
+    },
+    {
+      titulo: 'Região - Passo 6',
+      texto: 'Escolha Estados Unidos ou México.'
+    },
+    {
+      titulo: 'Região - Passo 7',
+      texto: 'Finalize a configuração da TV. Depois volte na loja Apps e procure novamente por IB Player Pro.'
+    }
   ]
 };
