@@ -6,12 +6,7 @@ const { enviarWhatsapp } = require('../services/evolution');
 
 router.post('/', async (req, res) => {
   try {
-
-    const {
-      nomeCliente,
-      whatsapp,
-      tipoTeste
-    } = req.body;
+    const { nomeCliente, whatsapp, tipoTeste } = req.body;
 
     const whatsappLimpo = limparWhatsapp(whatsapp);
 
@@ -22,11 +17,27 @@ router.post('/', async (req, res) => {
       });
     }
 
-    const { dados } = await gerarTesteNetplay({
-      nomeCliente,
-      whatsapp,
-      tipoTeste
-    });
+    let dados = {};
+
+    try {
+      const retornoNetplay = await gerarTesteNetplay({
+        nomeCliente,
+        whatsapp,
+        tipoTeste
+      });
+
+      dados = retornoNetplay.dados || {};
+    } catch (erroNetplay) {
+      console.error(
+        'Netplay bloqueou ou retornou erro:',
+        erroNetplay.response?.data || erroNetplay.message
+      );
+
+      return res.json({
+        success: false,
+        mensagem: 'VOCÊ JÁ REALIZOU O TESTE!'
+      });
+    }
 
     const username =
       dados.username ||
@@ -58,28 +69,20 @@ router.post('/', async (req, res) => {
     let enviado = false;
 
     try {
-
-      enviado = await enviarWhatsapp(
-        whatsappLimpo,
-        texto
-      );
-
+      enviado = await enviarWhatsapp(whatsappLimpo, texto);
     } catch (erroWhatsapp) {
-
       console.error(
         'Erro ao enviar WhatsApp:',
-        erroWhatsapp.response?.data ||
-        erroWhatsapp.message
+        erroWhatsapp.response?.data || erroWhatsapp.message
       );
-
       enviado = false;
     }
 
     return res.json({
       success: true,
       mensagem: enviado
-        ? 'TESTE GERADO COM SUCESSO! Confira seu WhatsApp.'
-        : 'TESTE GERADO COM SUCESSO! Mas não conseguimos enviar no WhatsApp.',
+        ? '✅ TESTE GERADO COM SUCESSO! Você receberá seu login e senha no WhatsApp.'
+        : '✅ TESTE GERADO COM SUCESSO! Caso não receba no WhatsApp, chame o suporte.',
       dados: {
         username,
         password,
@@ -88,11 +91,9 @@ router.post('/', async (req, res) => {
     });
 
   } catch (error) {
-
     console.error(
-      'Erro ao gerar teste:',
-      error.response?.data ||
-      error.message
+      'Erro inesperado ao gerar teste:',
+      error.response?.data || error.message
     );
 
     return res.json({
