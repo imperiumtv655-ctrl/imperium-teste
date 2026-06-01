@@ -19,7 +19,7 @@ async function enviarWhatsapp(numero, texto) {
         'Content-Type': 'application/json',
         apikey: process.env.EVOLUTION_APIKEY
       },
-      timeout: 15000
+      timeout: 45000
     }
   );
 
