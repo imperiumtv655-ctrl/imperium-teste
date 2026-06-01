@@ -6,7 +6,7 @@ body{
 }
 
 .container{
-  max-width:850px;
+  max-width:950px;
   margin:30px auto;
   padding:30px;
   background:#1f2937;
@@ -33,7 +33,7 @@ button{
 }
 
 .hidden{
-  display:none;
+  display:none !important;
 }
 
 .grid-dispositivos{
@@ -47,6 +47,7 @@ button{
   color:white;
   border:1px solid #374151;
   padding:20px;
+  min-height:190px;
 }
 
 .card-dispositivo:hover{
@@ -54,8 +55,16 @@ button{
   transform:scale(1.03);
 }
 
-.icone{
-  font-size:36px;
+.logo-dispositivo{
+  width:80px;
+  height:80px;
+  object-fit:contain;
+  margin-bottom:10px;
+}
+
+.icone-fallback{
+  font-size:40px;
+  margin-bottom:10px;
 }
 
 .card-dispositivo strong{
@@ -75,6 +84,7 @@ button{
   padding:6px 10px;
   border-radius:20px;
   margin-top:10px;
+  color:white;
 }
 
 .app-info{
@@ -94,6 +104,14 @@ button{
 
 .passo-box h3{
   color:#22c55e;
+}
+
+.imagem-tutorial{
+  width:100%;
+  max-width:850px;
+  border-radius:14px;
+  margin-top:20px;
+  border:1px solid #374151;
 }
 
 .progresso{
@@ -156,4 +174,17 @@ select{
   margin-top:20px;
   text-align:center;
   font-weight:bold;
+}
+
+@media(max-width:600px){
+  .container{
+    margin:0;
+    border-radius:0;
+    min-height:100vh;
+    padding:20px;
+  }
+
+  .botoes{
+    grid-template-columns:1fr;
+  }
 }
