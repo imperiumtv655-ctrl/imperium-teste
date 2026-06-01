@@ -1,12 +1,62 @@
 const dispositivos = [
-  { id: 'samsung', nome: 'Samsung TV', icone: '📺', app: 'IB Player Pro' },
-  { id: 'lg', nome: 'LG TV', icone: '📺', app: 'IB Player Pro' },
-  { id: 'androidtv', nome: 'Android TV', icone: '📺', app: 'NetPlay', desc: 'TCL, Philips, Philco, AOC, Sony, Toshiba, Xiaomi...' },
-  { id: 'roku', nome: 'Roku TV', icone: '🟣', app: 'IB Player Pro', desc: 'AOC Roku, Philco Roku, TCL Roku e dispositivos Roku' },
-  { id: 'firetv', nome: 'Fire TV', icone: '🔥', app: 'NetPlay' },
-  { id: 'tvbox', nome: 'TV Box', icone: '📦', app: 'NetPlay' },
-  { id: 'android', nome: 'Android', icone: '📱', app: 'NetPlay' },
-  { id: 'iphone', nome: 'iPhone', icone: '🍎', app: 'NetPlay' }
+  {
+    id: 'samsung',
+    nome: 'Samsung TV',
+    imagem: 'imagens/dispositivos/samsung.png',
+    iconeFallback: '📺',
+    app: 'IB Player Pro'
+  },
+  {
+    id: 'lg',
+    nome: 'LG TV',
+    imagem: 'imagens/dispositivos/lg.png',
+    iconeFallback: '📺',
+    app: 'IB Player Pro'
+  },
+  {
+    id: 'androidtv',
+    nome: 'Android TV',
+    imagem: 'imagens/dispositivos/androidtv.png',
+    iconeFallback: '📺',
+    app: 'NetPlay',
+    desc: 'TCL, Philips, Philco, AOC, Sony, Toshiba, Xiaomi...'
+  },
+  {
+    id: 'roku',
+    nome: 'Roku TV',
+    imagem: 'imagens/dispositivos/roku.png',
+    iconeFallback: '🟣',
+    app: 'IB Player Pro',
+    desc: 'AOC Roku, Philco Roku, TCL Roku e dispositivos Roku'
+  },
+  {
+    id: 'firetv',
+    nome: 'Fire TV',
+    imagem: 'imagens/dispositivos/firetv.png',
+    iconeFallback: '🔥',
+    app: 'NetPlay'
+  },
+  {
+    id: 'tvbox',
+    nome: 'TV Box',
+    imagem: 'imagens/dispositivos/tvbox.png',
+    iconeFallback: '📦',
+    app: 'NetPlay'
+  },
+  {
+    id: 'android',
+    nome: 'Android',
+    imagem: 'imagens/dispositivos/android.png',
+    iconeFallback: '📱',
+    app: 'NetPlay'
+  },
+  {
+    id: 'iphone',
+    nome: 'iPhone',
+    imagem: 'imagens/dispositivos/iphone.png',
+    iconeFallback: '🍎',
+    app: 'NetPlay'
+  }
 ];
 
 let tutorialAtual = null;
@@ -28,7 +78,13 @@ function carregarDispositivos() {
 
   lista.innerHTML = dispositivos.map(item => `
     <button class="card-dispositivo" onclick="abrirTutorial('${item.id}')">
-      <div class="icone">${item.icone}</div>
+      <img 
+        src="${item.imagem}" 
+        alt="${item.nome}" 
+        class="logo-dispositivo"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      >
+      <div class="icone-fallback" style="display:none;">${item.iconeFallback}</div>
       <strong>${item.nome}</strong>
       ${item.desc ? `<span>${item.desc}</span>` : ''}
       <small>${item.app}</small>
@@ -37,21 +93,25 @@ function carregarDispositivos() {
 }
 
 async function abrirTutorial(id) {
-  const resposta = await fetch(`/api/tutorial/${id}`);
-  const dados = await resposta.json();
+  try {
+    const resposta = await fetch(`/api/tutorial/${id}`);
+    const dados = await resposta.json();
 
-  if (!dados.success) {
-    alert('Tutorial ainda não cadastrado.');
-    return;
+    if (!dados.success) {
+      alert('Tutorial ainda não cadastrado.');
+      return;
+    }
+
+    tutorialAtual = dados.tutorial;
+    passoAtual = 0;
+
+    esconderTodas();
+    document.getElementById('telaTutorial').classList.remove('hidden');
+
+    renderizarPasso();
+  } catch (error) {
+    alert('Erro ao carregar tutorial.');
   }
-
-  tutorialAtual = dados.tutorial;
-  passoAtual = 0;
-
-  esconderTodas();
-  document.getElementById('telaTutorial').classList.remove('hidden');
-
-  renderizarPasso();
 }
 
 function renderizarPasso() {
@@ -59,7 +119,7 @@ function renderizarPasso() {
   const passo = passos[passoAtual];
 
   document.getElementById('tituloTutorial').innerText =
-    `${tutorialAtual.icone} ${tutorialAtual.dispositivo}`;
+    `${tutorialAtual.icone || ''} ${tutorialAtual.dispositivo}`;
 
   document.getElementById('appTutorial').innerText =
     `Aplicativo: ${tutorialAtual.app}`;
@@ -67,10 +127,36 @@ function renderizarPasso() {
   document.getElementById('tituloPasso').innerText =
     `${passo.titulo} (${passoAtual + 1} de ${passos.length})`;
 
-  document.getElementById('textoPasso').innerText = passo.texto;
+  document.getElementById('textoPasso').innerText = passo.texto || '';
+
+  const img = document.getElementById('imagemPasso');
+
+  if (passo.imagem) {
+    img.src = passo.imagem;
+    img.classList.remove('hidden');
+  } else {
+    img.classList.add('hidden');
+    img.removeAttribute('src');
+  }
 
   const porcentagem = ((passoAtual + 1) / passos.length) * 100;
   document.getElementById('barraProgresso').style.width = `${porcentagem}%`;
+
+  const btnNaoEncontrei = document.getElementById('btnNaoEncontrei');
+
+  if (passo.mostrarNaoEncontrei) {
+    btnNaoEncontrei.classList.remove('hidden');
+  } else {
+    btnNaoEncontrei.classList.add('hidden');
+  }
+
+  const btnProximo = document.getElementById('btnProximo');
+
+  if (passoAtual === passos.length - 1) {
+    btnProximo.innerText = '✅ Já instalei';
+  } else {
+    btnProximo.innerText = 'Próximo →';
+  }
 }
 
 function proximoPasso() {
@@ -99,10 +185,14 @@ function abrirRegiao() {
 function renderizarRegiao() {
   const passos = tutorialAtual.regiaoPassos || [];
 
+  const img = document.getElementById('imagemRegiao');
+
   if (!passos.length) {
     document.getElementById('tituloRegiao').innerText = 'Ajuda';
     document.getElementById('textoRegiao').innerText =
       'Caso não encontre o aplicativo, entre em contato com nosso suporte.';
+    img.classList.add('hidden');
+    document.getElementById('barraRegiao').style.width = '100%';
     return;
   }
 
@@ -111,7 +201,15 @@ function renderizarRegiao() {
   document.getElementById('tituloRegiao').innerText =
     `${passo.titulo} (${regiaoAtual + 1} de ${passos.length})`;
 
-  document.getElementById('textoRegiao').innerText = passo.texto;
+  document.getElementById('textoRegiao').innerText = passo.texto || '';
+
+  if (passo.imagem) {
+    img.src = passo.imagem;
+    img.classList.remove('hidden');
+  } else {
+    img.classList.add('hidden');
+    img.removeAttribute('src');
+  }
 
   const porcentagem = ((regiaoAtual + 1) / passos.length) * 100;
   document.getElementById('barraRegiao').style.width = `${porcentagem}%`;
@@ -147,6 +245,7 @@ function voltarDispositivos() {
 function voltarTutorial() {
   esconderTodas();
   document.getElementById('telaTutorial').classList.remove('hidden');
+  renderizarPasso();
 }
 
 document.getElementById('formTeste').addEventListener('submit', async (e) => {
