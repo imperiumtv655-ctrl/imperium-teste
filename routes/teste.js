@@ -25,9 +25,9 @@ router.post('/', async (req, res) => {
 
     const username = dados.username || (dados.dados && dados.dados.username);
     const password = dados.password || (dados.dados && dados.dados.password);
-    const dns = dados.dns || 'http://galaxy.blcplay.com';
     const validade = dados.expiresAtFormatted || dados.validade || '12 Horas';
 
+    // Quando a Netplay bloquear teste repetido
     if (!username || !password) {
       return res.json({
         success: false,
@@ -35,29 +35,38 @@ router.post('/', async (req, res) => {
       });
     }
 
-    const texto = `🛸 *TESTE GERADO COM SUCESSO!*
+    const texto = `🎉 *TESTE GERADO COM SUCESSO!*
+
+Olá ${nomeCliente || 'cliente'}! 😊
 
 👤 *Usuário:* ${username}
 🔑 *Senha:* ${password}
 
 ⏳ *Validade:* ${validade}
 
-🌐 *DNS/URL:* ${dns}`;
+✅ Agora é só entrar no aplicativo que você instalou e usar os dados acima.`;
 
-    const enviado = await enviarWhatsapp(whatsappLimpo, texto);
+    let enviado = false;
+
+    try {
+      enviado = await enviarWhatsapp(whatsappLimpo, texto);
+    } catch (erroWhatsapp) {
+      console.error('Erro ao enviar WhatsApp:', erroWhatsapp.message);
+      enviado = false;
+    }
 
     return res.json({
       success: true,
       mensagem: enviado
         ? 'TESTE GERADO COM SUCESSO! Confira seu WhatsApp.'
-        : 'TESTE GERADO COM SUCESSO! WhatsApp ainda não configurado.',
+        : 'TESTE GERADO COM SUCESSO! Mas não conseguimos enviar no WhatsApp. Chame o suporte.',
       dados: {
         username,
         password,
-        dns,
         validade
       }
     });
+
   } catch (error) {
     console.error('Erro ao gerar teste:', error.message);
 
