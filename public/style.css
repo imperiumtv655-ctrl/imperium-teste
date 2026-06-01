@@ -1,44 +1,149 @@
-
 body{
   background:#111827;
   color:white;
   font-family:Arial, Helvetica, sans-serif;
+  margin:0;
 }
 
 .container{
-  max-width:500px;
-  margin:50px auto;
+  max-width:900px;
+  margin:30px auto;
   padding:30px;
   background:#1f2937;
-  border-radius:10px;
+  border-radius:14px;
 }
 
 h1{
   text-align:center;
+  margin-bottom:5px;
 }
 
-p{
+.subtitulo{
   text-align:center;
+  margin-bottom:30px;
+}
+
+h2{
+  text-align:center;
+}
+
+.grid-dispositivos{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+  gap:15px;
+}
+
+.card-dispositivo{
+  background:#111827;
+  color:white;
+  border:1px solid #374151;
+  border-radius:12px;
+  padding:20px;
+  cursor:pointer;
+  text-align:center;
+  transition:0.2s;
+}
+
+.card-dispositivo:hover{
+  transform:scale(1.03);
+  border-color:#22c55e;
+}
+
+.card-dispositivo .icone{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.card-dispositivo strong{
+  display:block;
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.card-dispositivo span{
+  display:block;
+  font-size:13px;
+  color:#d1d5db;
+  margin-bottom:8px;
+}
+
+.card-dispositivo small{
+  display:inline-block;
+  background:#22c55e;
+  color:white;
+  padding:5px 8px;
+  border-radius:999px;
+  font-weight:bold;
+}
+
+.hidden{
+  display:none;
+}
+
+.app-box,
+.modelos-box{
+  background:#111827;
+  border:1px solid #374151;
+  border-radius:10px;
+  padding:15px;
+  margin:15px 0;
+}
+
+.app-box span{
+  display:block;
+  margin-top:5px;
+  font-size:20px;
+  color:#22c55e;
+  font-weight:bold;
+}
+
+ol{
+  background:#111827;
+  border-radius:10px;
+  padding:20px 20px 20px 40px;
+}
+
+li{
+  margin-bottom:12px;
+  line-height:1.5;
 }
 
 input,
 select,
 button{
   width:100%;
-  padding:12px;
+  padding:13px;
   margin-top:10px;
   border:none;
-  border-radius:6px;
+  border-radius:8px;
   box-sizing:border-box;
 }
 
 button{
-  background:#22c55e;
-  color:white;
   font-weight:bold;
   cursor:pointer;
 }
 
+.btn-principal,
+form button{
+  background:#22c55e;
+  color:white;
+}
+
+.btn-secundario{
+  background:#f59e0b;
+  color:#111827;
+}
+
+.btn-voltar{
+  background:#374151;
+  color:white;
+  width:auto;
+  padding:10px 15px;
+}
+
 #resultado{
   margin-top:20px;
+  text-align:center;
+  font-weight:bold;
 }
