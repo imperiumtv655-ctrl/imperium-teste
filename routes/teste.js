@@ -6,7 +6,12 @@ const { enviarWhatsapp } = require('../services/evolution');
 
 router.post('/', async (req, res) => {
   try {
-    const { nomeCliente, whatsapp, tipoTeste } = req.body;
+
+    const {
+      nomeCliente,
+      whatsapp,
+      tipoTeste
+    } = req.body;
 
     const whatsappLimpo = limparWhatsapp(whatsapp);
 
@@ -23,11 +28,19 @@ router.post('/', async (req, res) => {
       tipoTeste
     });
 
-    const username = dados.username || (dados.dados && dados.dados.username);
-    const password = dados.password || (dados.dados && dados.dados.password);
-    const validade = dados.expiresAtFormatted || dados.validade || '12 Horas';
+    const username =
+      dados.username ||
+      (dados.dados && dados.dados.username);
 
-    // Quando a Netplay bloquear teste repetido
+    const password =
+      dados.password ||
+      (dados.dados && dados.dados.password);
+
+    const validade =
+      dados.expiresAtFormatted ||
+      dados.validade ||
+      '12 Horas';
+
     if (!username || !password) {
       return res.json({
         success: false,
@@ -37,21 +50,28 @@ router.post('/', async (req, res) => {
 
     const texto = `🎉 *TESTE GERADO COM SUCESSO!*
 
-Olá ${nomeCliente || 'cliente'}! 😊
-
 👤 *Usuário:* ${username}
 🔑 *Senha:* ${password}
 
-⏳ *Validade:* ${validade}
-
-✅ Agora é só entrar no aplicativo que você instalou e usar os dados acima.`;
+⏳ *Validade:* ${validade}`;
 
     let enviado = false;
 
     try {
-      enviado = await enviarWhatsapp(whatsappLimpo, texto);
+
+      enviado = await enviarWhatsapp(
+        whatsappLimpo,
+        texto
+      );
+
     } catch (erroWhatsapp) {
-      console.error('Erro ao enviar WhatsApp:', erroWhatsapp.message);
+
+      console.error(
+        'Erro ao enviar WhatsApp:',
+        erroWhatsapp.response?.data ||
+        erroWhatsapp.message
+      );
+
       enviado = false;
     }
 
@@ -59,7 +79,7 @@ Olá ${nomeCliente || 'cliente'}! 😊
       success: true,
       mensagem: enviado
         ? 'TESTE GERADO COM SUCESSO! Confira seu WhatsApp.'
-        : 'TESTE GERADO COM SUCESSO! Mas não conseguimos enviar no WhatsApp. Chame o suporte.',
+        : 'TESTE GERADO COM SUCESSO! Mas não conseguimos enviar no WhatsApp.',
       dados: {
         username,
         password,
@@ -68,7 +88,12 @@ Olá ${nomeCliente || 'cliente'}! 😊
     });
 
   } catch (error) {
-    console.error('Erro ao gerar teste:', error.message);
+
+    console.error(
+      'Erro ao gerar teste:',
+      error.response?.data ||
+      error.message
+    );
 
     return res.json({
       success: false,
