@@ -6,6 +6,7 @@ const path = require('path');
 
 const testeRoute = require('./routes/teste');
 const tutorialRoute = require('./routes/tutorial');
+const evolutionRoute = require('./routes/evolution');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/teste', testeRoute);
 app.use('/api/tutorial', tutorialRoute);
+app.use('/api/evolution', evolutionRoute);
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
