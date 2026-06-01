@@ -9,39 +9,69 @@
 <body>
 
 <div class="container">
-  <h1>🛸 IMPERIUM TV</h1>
-  <p class="subtitulo">Teste Grátis 12 Horas</p>
 
-  <section id="telaDispositivos">
-    <h2>📺 Escolha seu dispositivo</h2>
+  <section id="telaBoasVindas">
+    <h1>🎉 Bem-vindo à Imperium TV</h1>
+    <p>Antes de gerar seu teste grátis, vamos instalar o aplicativo correto.</p>
+    <p>⏱️ Leva menos de 2 minutos.</p>
+    <button onclick="mostrarDispositivos()">COMEÇAR</button>
+  </section>
 
+  <section id="telaDispositivos" class="hidden">
+    <h2>📺 Qual aparelho você vai utilizar?</h2>
     <div class="grid-dispositivos" id="listaDispositivos"></div>
   </section>
 
   <section id="telaTutorial" class="hidden">
     <button class="btn-voltar" onclick="voltarDispositivos()">← Voltar</button>
 
-    <div id="conteudoTutorial"></div>
+    <h2 id="tituloTutorial"></h2>
+    <p class="app-info" id="appTutorial"></p>
 
-    <button class="btn-secundario" onclick="mostrarRegiao()">
+    <div class="progresso">
+      <div id="barraProgresso"></div>
+    </div>
+
+    <div class="passo-box">
+      <h3 id="tituloPasso"></h3>
+      <p id="textoPasso"></p>
+    </div>
+
+    <div class="botoes">
+      <button class="btn-secundario" onclick="passoAnterior()">← Voltar</button>
+      <button class="btn-principal" onclick="proximoPasso()">Próximo →</button>
+    </div>
+
+    <button class="btn-alerta" onclick="abrirRegiao()">
       ❌ Não encontrei o aplicativo
-    </button>
-
-    <button class="btn-principal" onclick="mostrarFormulario()">
-      ✅ Já instalei o aplicativo
     </button>
   </section>
 
   <section id="telaRegiao" class="hidden">
     <button class="btn-voltar" onclick="voltarTutorial()">← Voltar ao tutorial</button>
-    <div id="conteudoRegiao"></div>
+
+    <h2>🌎 Ajuda para encontrar o aplicativo</h2>
+
+    <div class="progresso">
+      <div id="barraRegiao"></div>
+    </div>
+
+    <div class="passo-box">
+      <h3 id="tituloRegiao"></h3>
+      <p id="textoRegiao"></p>
+    </div>
+
+    <div class="botoes">
+      <button class="btn-secundario" onclick="regiaoAnterior()">← Voltar</button>
+      <button class="btn-principal" onclick="proximaRegiao()">Próximo →</button>
+    </div>
   </section>
 
   <section id="telaFormulario" class="hidden">
-    <button class="btn-voltar" onclick="voltarTutorial()">← Voltar ao tutorial</button>
+    <button class="btn-voltar" onclick="voltarTutorial()">← Voltar</button>
 
     <h2>✅ Agora vamos gerar seu teste</h2>
-    <p>Preencha seus dados abaixo para receber o usuário e senha no WhatsApp.</p>
+    <p>Preencha seus dados para receber usuário e senha no WhatsApp.</p>
 
     <form id="formTeste">
       <input type="text" id="nomeCliente" placeholder="Seu nome" required>
@@ -57,6 +87,7 @@
 
     <div id="resultado"></div>
   </section>
+
 </div>
 
 <script src="app.js"></script>
