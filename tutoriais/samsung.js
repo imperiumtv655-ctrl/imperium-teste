@@ -1,19 +1,21 @@
-
-const samsungTutorial = {
+module.exports = {
   id: 'samsung',
   dispositivo: 'Samsung TV',
   icone: '📺',
   app: 'IB Player Pro',
 
+  modelos: [
+    'TV Samsung Smart',
+    'Samsung Tizen',
+    'Samsung Crystal',
+    'Samsung QLED',
+    'Samsung Neo QLED'
+  ],
+
   titulo: 'Tutorial para Samsung TV',
 
-  introducao: `
-Antes de gerar seu teste, primeiro precisamos instalar o aplicativo correto na sua TV.
-
-O aplicativo se chama:
-
-✅ IB Player Pro
-`,
+  introducao:
+    'Antes de gerar seu teste, primeiro precisamos instalar o aplicativo correto na sua TV. O aplicativo se chama IB Player Pro.',
 
   passos: [
     'Pegue o controle da sua TV Samsung.',
@@ -26,11 +28,8 @@ O aplicativo se chama:
   ],
 
   regiaoTitulo: 'Não encontrou o aplicativo?',
-  regiaoTexto: `
-Isso pode acontecer porque algumas TVs Samsung estão configuradas em uma região onde o aplicativo não aparece.
-
-Nesse caso, será necessário alterar a região da TV.
-`,
+  regiaoTexto:
+    'Isso pode acontecer porque algumas TVs Samsung estão configuradas em uma região onde o aplicativo não aparece. Nesse caso, será necessário alterar a região da TV.',
 
   regiaoPassos: [
     'Vá em Configurações > Geral > Restaurar.',
@@ -42,5 +41,3 @@ Nesse caso, será necessário alterar a região da TV.
     'Volte na loja Apps e procure novamente por IB Player Pro.'
   ]
 };
-
-export default samsungTutorial;
