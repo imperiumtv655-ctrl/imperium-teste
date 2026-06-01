@@ -6,8 +6,8 @@ const tutoriais = {
   lg: require('../tutoriais/lg'),
   roku: require('../tutoriais/roku'),
   androidtv: require('../tutoriais/androidtv'),
-  tvbox: require('../tutoriais/tvbox'),
   firetv: require('../tutoriais/firetv'),
+  tvbox: require('../tutoriais/tvbox'),
   android: require('../tutoriais/android'),
   iphone: require('../tutoriais/iphone')
 };
@@ -22,7 +22,7 @@ router.get('/:id', (req, res) => {
     });
   }
 
-  return res.json({
+  res.json({
     success: true,
     tutorial
   });
