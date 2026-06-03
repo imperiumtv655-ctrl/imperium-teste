@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const { gerarTesteNetplay, limparWhatsapp } = require('../services/netplay');
-const { enviarWhatsapp } = require('../services/evolution');
 
 const {
   limparMac,
@@ -12,6 +11,7 @@ const {
 
 router.post('/', async (req, res) => {
   try {
+
     const {
       nomeCliente,
       whatsapp,
@@ -33,34 +33,40 @@ router.post('/', async (req, res) => {
     if (!macLimpo || !key) {
       return res.json({
         success: false,
-        mensagem: 'Informe o MAC e a KEY do aplicativo IB Player.'
+        mensagem: 'Informe o MAC e a KEY do aplicativo.'
       });
     }
 
-    const macExistente = await verificarMacJaUsouTeste(mac);
+    const macExistente =
+      await verificarMacJaUsouTeste(mac);
 
     if (macExistente) {
       return res.json({
         success: false,
-        mensagem: 'VOCÊ JÁ REALIZOU O TESTE NESTE APARELHO.'
+        mensagem:
+          '⚠️ VOCÊ JÁ REALIZOU O TESTE NESTE APARELHO.'
       });
     }
 
     let dados = {};
 
     try {
-      const retornoNetplay = await gerarTesteNetplay({
-        nomeCliente,
-        whatsapp,
-        tipoTeste
-      });
+
+      const retornoNetplay =
+        await gerarTesteNetplay({
+          nomeCliente,
+          whatsapp,
+          tipoTeste
+        });
 
       dados = retornoNetplay.dados || {};
 
     } catch (erroNetplay) {
+
       console.error(
         'Erro Netplay:',
-        erroNetplay.response?.data || erroNetplay.message
+        erroNetplay.response?.data ||
+        erroNetplay.message
       );
 
       return res.json({
@@ -83,10 +89,12 @@ router.post('/', async (req, res) => {
       '12 Horas';
 
     if (!username || !password) {
+
       return res.json({
         success: false,
         mensagem: 'VOCÊ JÁ REALIZOU O TESTE!'
       });
+
     }
 
     await salvarTesteIb({
@@ -101,58 +109,29 @@ router.post('/', async (req, res) => {
       status: 'gerado'
     });
 
-    console.log('=================================');
+    console.log('==============================');
     console.log('NOVO TESTE IB GERADO');
     console.log('Nome:', nomeCliente);
     console.log('WhatsApp:', whatsappLimpo);
     console.log('MAC:', mac);
-    console.log('MAC Normalizado:', macLimpo);
     console.log('KEY:', key);
     console.log('USER:', username);
     console.log('PASS:', password);
-    console.log('=================================');
-
-    const texto = `✅ *TESTE ATIVADO COM SUCESSO!*
-
-Olá ${nomeCliente || 'cliente'} 😊
-
-Seu aplicativo *IB Player* está sendo configurado.
-
-📺 Mantenha a TV desligada ou o aplicativo fechado por alguns instantes.
-
-⏳ *Validade:* ${validade}
-
-Assim que finalizar, abra o aplicativo e atualize a lista.`;
-
-    let enviado = false;
-
-    try {
-      enviado = await enviarWhatsapp(
-        whatsappLimpo,
-        texto
-      );
-    } catch (erroWhatsapp) {
-      console.error(
-        'Erro WhatsApp:',
-        erroWhatsapp.response?.data ||
-        erroWhatsapp.message
-      );
-
-      enviado = false;
-    }
+    console.log('==============================');
 
     return res.json({
       success: true,
-      mensagem: enviado
-        ? '✅ TESTE ATIVADO COM SUCESSO! Você receberá a confirmação no WhatsApp.'
-        : '✅ TESTE ATIVADO COM SUCESSO! Caso não receba no WhatsApp, chame o suporte.',
+      mensagem:
+        '✅ Teste gerado com sucesso! Aguarde enquanto configuramos seu dispositivo.',
       dados: {
         mac,
+        key,
         validade
       }
     });
 
   } catch (error) {
+
     console.error(
       'Erro geral:',
       error.response?.data ||
@@ -161,7 +140,8 @@ Assim que finalizar, abra o aplicativo e atualize a lista.`;
 
     return res.json({
       success: false,
-      mensagem: 'Erro ao ativar teste. Tente novamente.'
+      mensagem:
+        'Erro ao ativar teste. Tente novamente.'
     });
   }
 });
