@@ -1,100 +1,395 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imperium TV - Teste Grátis</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+const dispositivos = [
+  {
+    id: 'samsung',
+    nome: 'Samsung TV',
+    imagem: 'imagens/dispositivos/samsung.png',
+    iconeFallback: '📺',
+    app: 'IB Player Pro'
+  },
+  {
+    id: 'lg',
+    nome: 'LG TV',
+    imagem: 'imagens/dispositivos/lg.png',
+    iconeFallback: '📺',
+    app: 'IB Player Pro'
+  },
+  {
+    id: 'androidtv',
+    nome: 'Android TV',
+    imagem: 'imagens/dispositivos/androidtv.png',
+    iconeFallback: '📺',
+    app: 'IB Player Pro',
+    desc: 'TCL, Philips, Philco, AOC, Sony, Toshiba, Xiaomi...'
+  },
+  {
+    id: 'roku',
+    nome: 'Roku TV',
+    imagem: 'imagens/dispositivos/roku.png',
+    iconeFallback: '🟣',
+    app: 'IB Player Pro',
+    desc: 'AOC Roku, Philco Roku, TCL Roku e dispositivos Roku'
+  },
+  {
+    id: 'firetv',
+    nome: 'Fire TV',
+    imagem: 'imagens/dispositivos/firetv.png',
+    iconeFallback: '🔥',
+    app: 'IB Player Pro'
+  },
+  {
+    id: 'tvbox',
+    nome: 'TV Box',
+    imagem: 'imagens/dispositivos/tvbox.png',
+    iconeFallback: '📦',
+    app: 'IB Player Pro'
+  },
+  {
+    id: 'android',
+    nome: 'Android',
+    imagem: 'imagens/dispositivos/android.png',
+    iconeFallback: '📱',
+    app: 'IB Player Pro'
+  },
+  {
+    id: 'iphone',
+    nome: 'iPhone',
+    imagem: 'imagens/dispositivos/iphone.png',
+    iconeFallback: '🍎',
+    app: 'IB Player Pro'
+  }
+];
 
-<div class="container">
+let tutorialAtual = null;
+let passoAtual = 0;
+let regiaoAtual = 0;
+let etapaFormulario = 0;
 
-  <section id="telaBoasVindas">
-    <h1>🎉 Bem-vindo à Imperium TV</h1>
-    <p>Antes de ativar seu teste grátis, vamos instalar o aplicativo correto.</p>
-    <p>⏱️ Leva menos de 2 minutos.</p>
-    <button class="btn-principal" onclick="mostrarDispositivos()">COMEÇAR</button>
-  </section>
+function esconderTodas() {
+  document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+}
 
-  <section id="telaDispositivos" class="hidden">
-    <h2>📺 Qual aparelho você vai utilizar?</h2>
-    <div class="grid-dispositivos" id="listaDispositivos"></div>
-  </section>
+async function mostrarDispositivos() {
+  esconderTodas();
 
-  <section id="telaTutorial" class="hidden">
-    <button class="btn-voltar" onclick="voltarDispositivos()">← Voltar</button>
+  document.getElementById('telaDispositivos').classList.remove('hidden');
 
-    <h2 id="tituloTutorial"></h2>
-    <p class="app-info" id="appTutorial"></p>
+  carregarDispositivos();
 
-    <div class="progresso">
-      <div id="barraProgresso"></div>
-    </div>
+  fetch('/api/evolution/ping')
+    .then(() => console.log('Evolution acordada'))
+    .catch(() => console.log('Evolution iniciando...'));
+}
 
-    <div class="passo-box">
-      <h3 id="tituloPasso"></h3>
-      <p id="textoPasso"></p>
-      <img id="imagemPasso" class="imagem-tutorial hidden" alt="Imagem do tutorial">
-    </div>
+function carregarDispositivos() {
+  const lista = document.getElementById('listaDispositivos');
 
-    <div class="botoes">
-      <button class="btn-secundario" onclick="passoAnterior()">← Voltar</button>
-      <button class="btn-principal" onclick="proximoPasso()" id="btnProximo">Próximo →</button>
-    </div>
+  lista.innerHTML = dispositivos.map(item => `
+    <button class="card-dispositivo" onclick="abrirTutorial('${item.id}')">
+      <img
+        src="${item.imagem}"
+        alt="${item.nome}"
+        class="logo-dispositivo"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      >
 
-    <button id="btnNaoEncontrei" class="btn-alerta hidden" onclick="abrirRegiao()">
-      ❌ Não encontrei o aplicativo
+      <div class="icone-fallback" style="display:none;">
+        ${item.iconeFallback}
+      </div>
+
+      <strong>${item.nome}</strong>
+
+      ${item.desc ? `<span>${item.desc}</span>` : ''}
+
+      <small>${item.app}</small>
     </button>
-  </section>
+  `).join('');
+}
 
-  <section id="telaRegiao" class="hidden">
-    <button class="btn-voltar" onclick="voltarTutorial()">← Voltar ao tutorial</button>
+async function abrirTutorial(id) {
+  try {
+    const resposta = await fetch(`/api/tutorial/${id}`);
+    const dados = await resposta.json();
 
-    <h2>🌎 Ajuda para encontrar o aplicativo</h2>
+    if (!dados.success) {
+      alert('Tutorial ainda não cadastrado.');
+      return;
+    }
 
-    <div class="progresso">
-      <div id="barraRegiao"></div>
-    </div>
+    tutorialAtual = dados.tutorial;
+    passoAtual = 0;
 
-    <div class="passo-box">
-      <h3 id="tituloRegiao"></h3>
-      <p id="textoRegiao"></p>
-      <img id="imagemRegiao" class="imagem-tutorial hidden" alt="Imagem de região">
-    </div>
+    esconderTodas();
 
-    <div class="botoes">
-      <button class="btn-secundario" onclick="regiaoAnterior()">← Voltar</button>
-      <button class="btn-principal" onclick="proximaRegiao()">Próximo →</button>
-    </div>
-  </section>
+    document.getElementById('telaTutorial').classList.remove('hidden');
 
-  <section id="telaFormulario" class="hidden">
-    <button class="btn-voltar" onclick="voltarTutorial()">← Voltar</button>
+    renderizarPasso();
 
-    <h2>✅ Agora vamos ativar seu teste</h2>
-    <p>Preencha os dados abaixo para ativarmos seu aplicativo IB Player.</p>
+  } catch (error) {
+    alert('Erro ao carregar tutorial.');
+  }
+}
 
-    <form id="formTeste">
-      <input type="text" id="nomeCliente" placeholder="Seu nome" required>
-      <input type="text" id="whatsapp" placeholder="WhatsApp" required>
+function renderizarPasso() {
+  const passos = tutorialAtual.passos;
+  const passo = passos[passoAtual];
 
-      <input type="text" id="mac" placeholder="MAC do aplicativo IB Player" required>
-      <input type="text" id="key" placeholder="KEY do aplicativo IB Player" required>
+  document.getElementById('tituloTutorial').innerText =
+    `${tutorialAtual.icone || ''} ${tutorialAtual.dispositivo}`;
 
-      <select id="tipoTeste">
-        <option value="sem_adulto">Sem Adulto</option>
-        <option value="com_adulto">Com Adulto 🔞</option>
-      </select>
+  document.getElementById('appTutorial').innerText =
+    `Aplicativo: ${tutorialAtual.app}`;
 
-      <button type="submit" class="btn-principal">ATIVAR TESTE</button>
-    </form>
+  document.getElementById('tituloPasso').innerText =
+    `${passo.titulo} (${passoAtual + 1} de ${passos.length})`;
 
-    <div id="resultado"></div>
-  </section>
+  document.getElementById('textoPasso').innerText = passo.texto || '';
 
-</div>
+  const img = document.getElementById('imagemPasso');
 
-<script src="app.js"></script>
-</body>
-</html>
+  if (passo.imagem) {
+    img.src = passo.imagem;
+    img.classList.remove('hidden');
+  } else {
+    img.classList.add('hidden');
+    img.removeAttribute('src');
+  }
+
+  const porcentagem = ((passoAtual + 1) / passos.length) * 100;
+  document.getElementById('barraProgresso').style.width = `${porcentagem}%`;
+
+  const btnNaoEncontrei = document.getElementById('btnNaoEncontrei');
+
+  if (passo.mostrarNaoEncontrei) {
+    btnNaoEncontrei.classList.remove('hidden');
+  } else {
+    btnNaoEncontrei.classList.add('hidden');
+  }
+
+  const btnProximo = document.getElementById('btnProximo');
+
+  if (passoAtual === passos.length - 1) {
+    btnProximo.innerText = '✅ Já instalei';
+  } else {
+    btnProximo.innerText = 'Próximo →';
+  }
+}
+
+function proximoPasso() {
+  if (passoAtual < tutorialAtual.passos.length - 1) {
+    passoAtual++;
+    renderizarPasso();
+  } else {
+    mostrarFormulario();
+  }
+}
+
+function passoAnterior() {
+  if (passoAtual > 0) {
+    passoAtual--;
+    renderizarPasso();
+  }
+}
+
+function abrirRegiao() {
+  regiaoAtual = 0;
+
+  esconderTodas();
+
+  document.getElementById('telaRegiao').classList.remove('hidden');
+
+  renderizarRegiao();
+}
+
+function renderizarRegiao() {
+  const passos = tutorialAtual.regiaoPassos || [];
+  const img = document.getElementById('imagemRegiao');
+
+  if (!passos.length) {
+    document.getElementById('tituloRegiao').innerText = 'Ajuda';
+    document.getElementById('textoRegiao').innerText =
+      'Caso não encontre o aplicativo, entre em contato com nosso suporte.';
+
+    img.classList.add('hidden');
+    document.getElementById('barraRegiao').style.width = '100%';
+    return;
+  }
+
+  const passo = passos[regiaoAtual];
+
+  document.getElementById('tituloRegiao').innerText =
+    `${passo.titulo} (${regiaoAtual + 1} de ${passos.length})`;
+
+  document.getElementById('textoRegiao').innerText = passo.texto || '';
+
+  if (passo.imagem) {
+    img.src = passo.imagem;
+    img.classList.remove('hidden');
+  } else {
+    img.classList.add('hidden');
+    img.removeAttribute('src');
+  }
+
+  const porcentagem = ((regiaoAtual + 1) / passos.length) * 100;
+  document.getElementById('barraRegiao').style.width = `${porcentagem}%`;
+}
+
+function proximaRegiao() {
+  const passos = tutorialAtual.regiaoPassos || [];
+
+  if (regiaoAtual < passos.length - 1) {
+    regiaoAtual++;
+    renderizarRegiao();
+  } else {
+    voltarTutorial();
+  }
+}
+
+function regiaoAnterior() {
+  if (regiaoAtual > 0) {
+    regiaoAtual--;
+    renderizarRegiao();
+  }
+}
+
+function mostrarFormulario() {
+  esconderTodas();
+
+  etapaFormulario = 0;
+
+  document.getElementById('resultado').innerHTML = '';
+  document.getElementById('telaFormulario').classList.remove('hidden');
+
+  renderizarEtapaFormulario();
+}
+
+function renderizarEtapaFormulario() {
+  const etapas = [
+    'etapaMac',
+    'etapaKey',
+    'etapaNome',
+    'etapaWhatsapp',
+    'etapaConfirmacao'
+  ];
+
+  etapas.forEach(id => {
+    document.getElementById(id).classList.add('hidden');
+  });
+
+  document.getElementById(etapas[etapaFormulario]).classList.remove('hidden');
+
+  const porcentagem = ((etapaFormulario + 1) / etapas.length) * 100;
+  document.getElementById('barraFormulario').style.width = `${porcentagem}%`;
+
+  const btn = document.getElementById('btnAvancarFormulario');
+
+  if (etapaFormulario === etapas.length - 1) {
+    btn.innerText = '✅ Confirmar e ativar teste';
+    atualizarResumo();
+  } else {
+    btn.innerText = 'Próximo →';
+  }
+}
+
+function avancarEtapaFormulario() {
+  const mac = document.getElementById('mac').value.trim();
+  const key = document.getElementById('key').value.trim();
+  const nomeCliente = document.getElementById('nomeCliente').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+
+  if (etapaFormulario === 0 && !mac) {
+    alert('Informe o MAC do dispositivo.');
+    return;
+  }
+
+  if (etapaFormulario === 1 && !key) {
+    alert('Informe a KEY do dispositivo.');
+    return;
+  }
+
+  if (etapaFormulario === 2 && !nomeCliente) {
+    alert('Informe seu nome.');
+    return;
+  }
+
+  if (etapaFormulario === 3 && !whatsapp) {
+    alert('Informe seu WhatsApp.');
+    return;
+  }
+
+  if (etapaFormulario < 4) {
+    etapaFormulario++;
+    renderizarEtapaFormulario();
+  } else {
+    enviarTeste();
+  }
+}
+
+function voltarEtapaFormulario() {
+  if (etapaFormulario > 0) {
+    etapaFormulario--;
+    renderizarEtapaFormulario();
+  } else {
+    voltarTutorial();
+  }
+}
+
+function atualizarResumo() {
+  document.getElementById('resumoMac').innerText =
+    document.getElementById('mac').value.trim();
+
+  document.getElementById('resumoKey').innerText =
+    document.getElementById('key').value.trim();
+
+  document.getElementById('resumoNome').innerText =
+    document.getElementById('nomeCliente').value.trim();
+
+  document.getElementById('resumoWhatsapp').innerText =
+    document.getElementById('whatsapp').value.trim();
+}
+
+async function enviarTeste() {
+  const resultado = document.getElementById('resultado');
+
+  resultado.innerHTML = '⏳ Ativando seu teste...';
+
+  const nomeCliente = document.getElementById('nomeCliente').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+  const mac = document.getElementById('mac').value.trim();
+  const key = document.getElementById('key').value.trim();
+  const tipoTeste = document.getElementById('tipoTeste').value;
+
+  try {
+    const resposta = await fetch('/api/teste', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nomeCliente,
+        whatsapp,
+        mac,
+        key,
+        tipoTeste
+      })
+    });
+
+    const dados = await resposta.json();
+
+    resultado.innerHTML = dados.mensagem;
+
+  } catch {
+    resultado.innerHTML = 'Erro ao ativar teste. Tente novamente.';
+  }
+}
+
+function voltarDispositivos() {
+  mostrarDispositivos();
+}
+
+function voltarTutorial() {
+  esconderTodas();
+
+  document.getElementById('telaTutorial').classList.remove('hidden');
+
+  renderizarPasso();
+}
