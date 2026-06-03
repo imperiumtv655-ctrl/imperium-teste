@@ -4,7 +4,8 @@ async function adicionarPlaylistIb({
   mac,
   key,
   username,
-  password
+  password,
+  onUpdate
 }) {
   const pedido = {
     status: 'processando',
@@ -15,7 +16,9 @@ async function adicionarPlaylistIb({
     mensagem: 'Iniciando configuração do IB Player'
   };
 
-  await ibEngine([pedido]);
+  await ibEngine([pedido], {
+    onUpdate
+  });
 
   if (pedido.status !== 'ok') {
     throw new Error('Não foi possível configurar o IB Player.');
