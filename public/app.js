@@ -361,12 +361,16 @@ function atualizarResumo() {
 }
 
 async function enviarTeste() {
-  const resultado = document.getElementById('resultado');
+  esconderTodas();
 
-  resultado.innerHTML = `
-    <p>⏳ Ativando seu teste...</p>
-    <p>Não feche esta página.</p>
-  `;
+  document.getElementById('telaProcessando').classList.remove('hidden');
+
+  document.getElementById('tituloProcesso').innerText = 'Gerando teste...';
+  document.getElementById('mensagemProcesso').innerText = 'Estamos criando seu acesso. Aguarde.';
+  document.getElementById('barraProcesso').style.width = '20%';
+  document.getElementById('percentualProcesso').innerText = '20%';
+
+  atualizarChecklistProcesso({});
 
   const nomeCliente = document.getElementById('nomeCliente').value.trim();
   const whatsapp = document.getElementById('whatsapp').value.trim();
@@ -392,21 +396,31 @@ async function enviarTeste() {
     const dados = await resposta.json();
 
     if (!dados.success) {
-      resultado.innerHTML = dados.mensagem;
+      document.getElementById('tituloProcesso').innerText = 'Atenção';
+      document.getElementById('mensagemProcesso').innerText = dados.mensagem;
+      document.getElementById('barraProcesso').style.width = '100%';
+      document.getElementById('percentualProcesso').innerText = '100%';
       return;
     }
 
-    resultado.innerHTML = `
-      <p>${dados.mensagem}</p>
-      <p>📡 Iniciando configuração do IB Player...</p>
-    `;
+    document.getElementById('tituloProcesso').innerText = 'Teste gerado!';
+    document.getElementById('mensagemProcesso').innerText = 'Agora estamos configurando seu IB Player.';
+    document.getElementById('barraProcesso').style.width = '35%';
+    document.getElementById('percentualProcesso').innerText = '35%';
+
+    atualizarChecklistProcesso({
+      teste: true
+    });
 
     if (dados.jobId) {
       acompanharStatus(dados.jobId);
     }
 
   } catch {
-    resultado.innerHTML = 'Erro ao ativar teste. Tente novamente.';
+    document.getElementById('tituloProcesso').innerText = 'Erro';
+    document.getElementById('mensagemProcesso').innerText = 'Erro ao ativar teste. Tente novamente.';
+    document.getElementById('barraProcesso').style.width = '100%';
+    document.getElementById('percentualProcesso').innerText = '100%';
   }
 }
 
@@ -424,10 +438,21 @@ function acompanharStatus(jobId) {
         return;
       }
 
-      document.getElementById('resultado').innerHTML = `
-        <p>${dados.mensagem}</p>
-        <p>Progresso: ${dados.progresso || 0}%</p>
-      `;
+      const progresso = dados.progresso || 0;
+
+      document.getElementById('tituloProcesso').innerText =
+        dados.titulo || 'Configurando...';
+
+      document.getElementById('mensagemProcesso').innerText =
+        dados.mensagem || 'Aguarde...';
+
+      document.getElementById('barraProcesso').style.width =
+        `${progresso}%`;
+
+      document.getElementById('percentualProcesso').innerText =
+        `${progresso}%`;
+
+      atualizarChecklistProcesso(dados.checklist || {});
 
       if (dados.status === 'finalizado' || dados.status === 'erro') {
         clearInterval(intervaloStatus);
@@ -436,7 +461,36 @@ function acompanharStatus(jobId) {
     } catch {
       console.log('Aguardando status...');
     }
-  }, 3000);
+  }, 2000);
+}
+
+function atualizarChecklistProcesso(checklist) {
+  document.getElementById('checkTeste').innerText =
+    checklist.teste ? '✅ Teste criado' : '⬜ Teste criado';
+
+  document.getElementById('checkAcesso').innerText =
+    checklist.acesso ? '✅ Acessando IB Player' : '⬜ Acessando IB Player';
+
+  document.getElementById('checkValidacao').innerText =
+    checklist.validacao ? '✅ Validando MAC e KEY' : '⬜ Validando MAC e KEY';
+
+  document.getElementById('checkPlaylist1').innerText =
+    checklist.playlist1 ? '✅ Playlist 1 adicionada' : '⬜ Playlist 1 adicionada';
+
+  document.getElementById('checkPlaylist2').innerText =
+    checklist.playlist2 ? '✅ Playlist 2 adicionada' : '⬜ Playlist 2 adicionada';
+
+  document.getElementById('checkPlaylist3').innerText =
+    checklist.playlist3 ? '✅ Playlist 3 adicionada' : '⬜ Playlist 3 adicionada';
+
+  document.getElementById('checkPlaylist4').innerText =
+    checklist.playlist4 ? '✅ Playlist 4 adicionada' : '⬜ Playlist 4 adicionada';
+
+  document.getElementById('checkPlaylist5').innerText =
+    checklist.playlist5 ? '✅ Playlist 5 adicionada' : '⬜ Playlist 5 adicionada';
+
+  document.getElementById('checkFinalizado').innerText =
+    checklist.finalizado ? '✅ Finalizando configuração' : '⬜ Finalizando configuração';
 }
 
 function voltarDispositivos() {
