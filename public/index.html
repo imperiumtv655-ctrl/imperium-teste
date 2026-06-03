@@ -82,31 +82,48 @@
     <div class="passo-box">
 
       <div id="etapaMac" class="etapa-form">
-        <h3>Passo 1 de 5</h3>
-        <p>Digite o endereço mac (mac adress) que aparece no IB Player.</p>
-        <input type="text" id="mac" placeholder="Ex: 00:1A:2b:3c:4d:5e">
+        <h3>Passo 1 de 6</h3>
+        <p>Digite o endereço do dispositivo que aparece no IB Player.</p>
+        <input type="text" id="mac" placeholder="Ex: 00:1A:79:AB:CD:EF">
       </div>
 
       <div id="etapaKey" class="etapa-form hidden">
-        <h3>Passo 2 de 5</h3>
-        <p>Digite a chave do dispositivo (key) que aparece no IB Player.</p>
-        <input type="text" id="key" placeholder="123456">
+        <h3>Passo 2 de 6</h3>
+        <p>Digite a chave do dispositivo que aparece no IB Player.</p>
+        <input type="text" id="key" placeholder="KEY do dispositivo">
       </div>
 
       <div id="etapaNome" class="etapa-form hidden">
-        <h3>Passo 3 de 5</h3>
+        <h3>Passo 3 de 6</h3>
         <p>Digite seu nome.</p>
         <input type="text" id="nomeCliente" placeholder="Seu nome">
       </div>
 
       <div id="etapaWhatsapp" class="etapa-form hidden">
-        <h3>Passo 4 de 5</h3>
+        <h3>Passo 4 de 6</h3>
         <p>Digite seu WhatsApp.</p>
         <input type="text" id="whatsapp" placeholder="WhatsApp">
       </div>
 
+      <div id="etapaTipoTeste" class="etapa-form hidden">
+        <h3>Passo 5 de 6</h3>
+        <p>Escolha o tipo de teste que deseja ativar.</p>
+
+        <div class="botoes-tipo-teste">
+          <button type="button" id="btnSemAdulto" class="btn-tipo ativo" onclick="selecionarTipoTeste('sem_adulto')">
+            ✅ Sem Adulto
+          </button>
+
+          <button type="button" id="btnComAdulto" class="btn-tipo" onclick="selecionarTipoTeste('com_adulto')">
+            🔞 Com Adulto
+          </button>
+        </div>
+
+        <input type="hidden" id="tipoTeste" value="sem_adulto">
+      </div>
+
       <div id="etapaConfirmacao" class="etapa-form hidden">
-        <h3>Passo 5 de 5</h3>
+        <h3>Passo 6 de 6</h3>
         <p>Confira se os dados estão corretos:</p>
 
         <div class="resumo-box">
@@ -114,12 +131,8 @@
           <p><strong>KEY:</strong> <span id="resumoKey"></span></p>
           <p><strong>Nome:</strong> <span id="resumoNome"></span></p>
           <p><strong>WhatsApp:</strong> <span id="resumoWhatsapp"></span></p>
+          <p><strong>Tipo de teste:</strong> <span id="resumoTipoTeste"></span></p>
         </div>
-
-        <select id="tipoTeste">
-          <option value="sem_adulto">Sem Adulto</option>
-          <option value="com_adulto">Com Adulto 🔞</option>
-        </select>
       </div>
 
     </div>
