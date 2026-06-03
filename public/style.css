@@ -132,6 +132,24 @@ button{
   transition:0.3s;
 }
 
+#barraProcesso{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, #22c55e, #86efac, #22c55e);
+  background-size:200% 100%;
+  animation: barraMovendo 1.2s linear infinite;
+  transition:0.4s;
+}
+
+@keyframes barraMovendo{
+  0%{
+    background-position:0% 50%;
+  }
+  100%{
+    background-position:200% 50%;
+  }
+}
+
 .botoes{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -200,6 +218,49 @@ select{
 
 .resumo-box p{
   margin:8px 0;
+}
+
+.processando-box{
+  position:relative;
+}
+
+.loader{
+  width:55px;
+  height:55px;
+  border:5px solid #374151;
+  border-top:5px solid #22c55e;
+  border-radius:50%;
+  animation:girar 1s linear infinite;
+  margin:0 auto 20px auto;
+}
+
+@keyframes girar{
+  from{
+    transform:rotate(0deg);
+  }
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+#percentualProcesso{
+  font-size:24px;
+  color:#22c55e;
+  font-weight:bold;
+  margin-top:15px;
+}
+
+.checklist-processo{
+  background:#111827;
+  border:1px solid #374151;
+  border-radius:14px;
+  padding:20px;
+  margin-top:20px;
+}
+
+.checklist-processo p{
+  margin:10px 0;
+  font-weight:bold;
 }
 
 #resultado{
