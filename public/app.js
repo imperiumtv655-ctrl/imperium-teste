@@ -63,21 +63,16 @@ let tutorialAtual = null;
 let passoAtual = 0;
 let regiaoAtual = 0;
 let etapaFormulario = 0;
+let intervaloStatus = null;
 
 function esconderTodas() {
   document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
 }
 
-async function mostrarDispositivos() {
+function mostrarDispositivos() {
   esconderTodas();
-
   document.getElementById('telaDispositivos').classList.remove('hidden');
-
   carregarDispositivos();
-
-  fetch('/api/evolution/ping')
-    .then(() => console.log('Evolution acordada'))
-    .catch(() => console.log('Evolution iniciando...'));
 }
 
 function carregarDispositivos() {
@@ -119,7 +114,6 @@ async function abrirTutorial(id) {
     passoAtual = 0;
 
     esconderTodas();
-
     document.getElementById('telaTutorial').classList.remove('hidden');
 
     renderizarPasso();
@@ -192,11 +186,8 @@ function passoAnterior() {
 
 function abrirRegiao() {
   regiaoAtual = 0;
-
   esconderTodas();
-
   document.getElementById('telaRegiao').classList.remove('hidden');
-
   renderizarRegiao();
 }
 
@@ -257,7 +248,6 @@ function mostrarFormulario() {
   etapaFormulario = 0;
 
   document.getElementById('resultado').innerHTML = '';
-
   document.getElementById('telaFormulario').classList.remove('hidden');
 
   renderizarEtapaFormulario();
@@ -373,7 +363,10 @@ function atualizarResumo() {
 async function enviarTeste() {
   const resultado = document.getElementById('resultado');
 
-  resultado.innerHTML = '⏳ Ativando seu teste...';
+  resultado.innerHTML = `
+    <p>⏳ Ativando seu teste...</p>
+    <p>Não feche esta página.</p>
+  `;
 
   const nomeCliente = document.getElementById('nomeCliente').value.trim();
   const whatsapp = document.getElementById('whatsapp').value.trim();
@@ -398,11 +391,52 @@ async function enviarTeste() {
 
     const dados = await resposta.json();
 
-    resultado.innerHTML = dados.mensagem;
+    if (!dados.success) {
+      resultado.innerHTML = dados.mensagem;
+      return;
+    }
+
+    resultado.innerHTML = `
+      <p>${dados.mensagem}</p>
+      <p>📡 Iniciando configuração do IB Player...</p>
+    `;
+
+    if (dados.jobId) {
+      acompanharStatus(dados.jobId);
+    }
 
   } catch {
     resultado.innerHTML = 'Erro ao ativar teste. Tente novamente.';
   }
+}
+
+function acompanharStatus(jobId) {
+  if (intervaloStatus) {
+    clearInterval(intervaloStatus);
+  }
+
+  intervaloStatus = setInterval(async () => {
+    try {
+      const resposta = await fetch(`/api/teste/status/${jobId}`);
+      const dados = await resposta.json();
+
+      if (!dados.success) {
+        return;
+      }
+
+      document.getElementById('resultado').innerHTML = `
+        <p>${dados.mensagem}</p>
+        <p>Progresso: ${dados.progresso || 0}%</p>
+      `;
+
+      if (dados.status === 'finalizado' || dados.status === 'erro') {
+        clearInterval(intervaloStatus);
+      }
+
+    } catch {
+      console.log('Aguardando status...');
+    }
+  }, 3000);
 }
 
 function voltarDispositivos() {
