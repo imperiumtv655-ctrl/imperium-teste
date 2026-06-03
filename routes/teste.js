@@ -6,20 +6,35 @@ const { enviarWhatsapp } = require('../services/evolution');
 
 router.post('/', async (req, res) => {
   try {
-    const { nomeCliente, whatsapp, tipoTeste } = req.body;
+
+    const {
+      nomeCliente,
+      whatsapp,
+      mac,
+      key,
+      tipoTeste
+    } = req.body;
 
     const whatsappLimpo = limparWhatsapp(whatsapp);
 
     if (!whatsappLimpo) {
       return res.json({
         success: false,
-        mensagem: 'Informe seu WhatsApp para gerar o teste.'
+        mensagem: 'Informe seu WhatsApp.'
+      });
+    }
+
+    if (!mac || !key) {
+      return res.json({
+        success: false,
+        mensagem: 'Informe o MAC e a KEY do aplicativo IB Player.'
       });
     }
 
     let dados = {};
 
     try {
+
       const retornoNetplay = await gerarTesteNetplay({
         nomeCliente,
         whatsapp,
@@ -27,9 +42,11 @@ router.post('/', async (req, res) => {
       });
 
       dados = retornoNetplay.dados || {};
+
     } catch (erroNetplay) {
+
       console.error(
-        'Netplay bloqueou ou retornou erro:',
+        'Erro Netplay:',
         erroNetplay.response?.data || erroNetplay.message
       );
 
@@ -59,46 +76,72 @@ router.post('/', async (req, res) => {
       });
     }
 
-    const texto = `🎉 *TESTE GERADO COM SUCESSO!*
+    // LOG TEMPORÁRIO
+    console.log('=================================');
+    console.log('NOVO TESTE GERADO');
+    console.log('Nome:', nomeCliente);
+    console.log('WhatsApp:', whatsappLimpo);
+    console.log('MAC:', mac);
+    console.log('KEY:', key);
+    console.log('USER:', username);
+    console.log('PASS:', password);
+    console.log('=================================');
 
-👤 *Usuário:* ${username}
-🔑 *Senha:* ${password}
+    const texto = `✅ *TESTE ATIVADO COM SUCESSO!*
 
-⏳ *Validade:* ${validade}`;
+Olá ${nomeCliente || 'cliente'} 😊
+
+Seu aplicativo *IB Player* está sendo configurado.
+
+📺 Mantenha a TV desligada ou o aplicativo fechado por alguns instantes.
+
+⏳ *Validade:* ${validade}
+
+Assim que finalizar, abra o aplicativo e atualize a lista.`;
 
     let enviado = false;
 
     try {
-      enviado = await enviarWhatsapp(whatsappLimpo, texto);
-    } catch (erroWhatsapp) {
-      console.error(
-        'Erro ao enviar WhatsApp:',
-        erroWhatsapp.response?.data || erroWhatsapp.message
+
+      enviado = await enviarWhatsapp(
+        whatsappLimpo,
+        texto
       );
+
+    } catch (erroWhatsapp) {
+
+      console.error(
+        'Erro WhatsApp:',
+        erroWhatsapp.response?.data ||
+        erroWhatsapp.message
+      );
+
       enviado = false;
     }
 
     return res.json({
       success: true,
       mensagem: enviado
-        ? '✅ TESTE GERADO COM SUCESSO! Você receberá seu login e senha no WhatsApp.'
-        : '✅ TESTE GERADO COM SUCESSO! Caso não receba no WhatsApp, chame o suporte.',
+        ? '✅ TESTE ATIVADO COM SUCESSO! Você receberá a confirmação no WhatsApp.'
+        : '✅ TESTE ATIVADO COM SUCESSO! Caso não receba no WhatsApp, chame o suporte.',
       dados: {
-        username,
-        password,
+        mac,
+        key,
         validade
       }
     });
 
   } catch (error) {
+
     console.error(
-      'Erro inesperado ao gerar teste:',
-      error.response?.data || error.message
+      'Erro geral:',
+      error.response?.data ||
+      error.message
     );
 
     return res.json({
       success: false,
-      mensagem: 'Erro ao gerar teste. Tente novamente.'
+      mensagem: 'Erro ao ativar teste. Tente novamente.'
     });
   }
 });
