@@ -364,6 +364,7 @@ async function enviarTeste() {
   esconderTodas();
 
   document.getElementById('telaProcessando').classList.remove('hidden');
+  document.getElementById('blocoSuporte').classList.add('hidden');
 
   document.getElementById('tituloProcesso').innerText = 'Gerando teste...';
   document.getElementById('mensagemProcesso').innerText = 'Estamos criando seu acesso. Aguarde.';
@@ -400,6 +401,7 @@ async function enviarTeste() {
       document.getElementById('mensagemProcesso').innerText = dados.mensagem;
       document.getElementById('barraProcesso').style.width = '100%';
       document.getElementById('percentualProcesso').innerText = '100%';
+      document.getElementById('blocoSuporte').classList.remove('hidden');
       return;
     }
 
@@ -421,6 +423,7 @@ async function enviarTeste() {
     document.getElementById('mensagemProcesso').innerText = 'Erro ao ativar teste. Tente novamente.';
     document.getElementById('barraProcesso').style.width = '100%';
     document.getElementById('percentualProcesso').innerText = '100%';
+    document.getElementById('blocoSuporte').classList.remove('hidden');
   }
 }
 
@@ -456,6 +459,7 @@ function acompanharStatus(jobId) {
 
       if (dados.status === 'finalizado' || dados.status === 'erro') {
         clearInterval(intervaloStatus);
+        document.getElementById('blocoSuporte').classList.remove('hidden');
       }
 
     } catch {
