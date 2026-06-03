@@ -4,9 +4,14 @@ const router = express.Router();
 const { gerarTesteNetplay, limparWhatsapp } = require('../services/netplay');
 const { enviarWhatsapp } = require('../services/evolution');
 
+const {
+  limparMac,
+  verificarMacJaUsouTeste,
+  salvarTesteIb
+} = require('../services/mac_service');
+
 router.post('/', async (req, res) => {
   try {
-
     const {
       nomeCliente,
       whatsapp,
@@ -16,6 +21,7 @@ router.post('/', async (req, res) => {
     } = req.body;
 
     const whatsappLimpo = limparWhatsapp(whatsapp);
+    const macLimpo = limparMac(mac);
 
     if (!whatsappLimpo) {
       return res.json({
@@ -24,17 +30,25 @@ router.post('/', async (req, res) => {
       });
     }
 
-    if (!mac || !key) {
+    if (!macLimpo || !key) {
       return res.json({
         success: false,
         mensagem: 'Informe o MAC e a KEY do aplicativo IB Player.'
       });
     }
 
+    const macExistente = await verificarMacJaUsouTeste(mac);
+
+    if (macExistente) {
+      return res.json({
+        success: false,
+        mensagem: 'VOCÊ JÁ REALIZOU O TESTE NESTE APARELHO.'
+      });
+    }
+
     let dados = {};
 
     try {
-
       const retornoNetplay = await gerarTesteNetplay({
         nomeCliente,
         whatsapp,
@@ -44,7 +58,6 @@ router.post('/', async (req, res) => {
       dados = retornoNetplay.dados || {};
 
     } catch (erroNetplay) {
-
       console.error(
         'Erro Netplay:',
         erroNetplay.response?.data || erroNetplay.message
@@ -76,12 +89,24 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // LOG TEMPORÁRIO
+    await salvarTesteIb({
+      nomeCliente,
+      whatsapp: whatsappLimpo,
+      mac,
+      key,
+      tipoTeste,
+      username,
+      password,
+      validade,
+      status: 'gerado'
+    });
+
     console.log('=================================');
-    console.log('NOVO TESTE GERADO');
+    console.log('NOVO TESTE IB GERADO');
     console.log('Nome:', nomeCliente);
     console.log('WhatsApp:', whatsappLimpo);
     console.log('MAC:', mac);
+    console.log('MAC Normalizado:', macLimpo);
     console.log('KEY:', key);
     console.log('USER:', username);
     console.log('PASS:', password);
@@ -102,14 +127,11 @@ Assim que finalizar, abra o aplicativo e atualize a lista.`;
     let enviado = false;
 
     try {
-
       enviado = await enviarWhatsapp(
         whatsappLimpo,
         texto
       );
-
     } catch (erroWhatsapp) {
-
       console.error(
         'Erro WhatsApp:',
         erroWhatsapp.response?.data ||
@@ -126,13 +148,11 @@ Assim que finalizar, abra o aplicativo e atualize a lista.`;
         : '✅ TESTE ATIVADO COM SUCESSO! Caso não receba no WhatsApp, chame o suporte.',
       dados: {
         mac,
-        key,
         validade
       }
     });
 
   } catch (error) {
-
     console.error(
       'Erro geral:',
       error.response?.data ||
