@@ -135,9 +135,23 @@ router.post('/', async (req, res) => {
     const jobId = criarJobId();
 
     atualizarProcesso(jobId, {
-      status: 'configurando',
-      mensagem: '📡 Teste gerado. Configurando seu IB Player, aguarde...',
-      progresso: 50,
+      status: 'iniciado',
+      titulo: '✅ Teste gerado',
+      mensagem: 'Seu teste foi criado. Agora vamos configurar o IB Player.',
+      progresso: 35,
+      etapaAtual: 1,
+      totalEtapas: 11,
+      checklist: {
+        teste: true,
+        acesso: false,
+        validacao: false,
+        playlist1: false,
+        playlist2: false,
+        playlist3: false,
+        playlist4: false,
+        playlist5: false,
+        finalizado: false
+      },
       mac,
       validade
     });
@@ -166,23 +180,57 @@ router.post('/', async (req, res) => {
 
     (async () => {
       try {
-        atualizarProcesso(jobId, {
-          status: 'configurando',
-          mensagem: '📝 Adicionando playlist no IB Player. Mantenha a TV desligada ou o app fechado...',
-          progresso: 75
-        });
-
         await adicionarPlaylistIb({
           mac,
           key,
           username,
-          password
+          password,
+          onUpdate: (status) => {
+            const checklistAtual = {
+              ...(processos.get(jobId)?.checklist || {})
+            };
+
+            if (status.progresso >= 45) checklistAtual.acesso = true;
+            if (status.progresso >= 55) checklistAtual.validacao = true;
+            if (status.playlistAtual >= 1) checklistAtual.playlist1 = true;
+            if (status.playlistAtual >= 2) checklistAtual.playlist2 = true;
+            if (status.playlistAtual >= 3) checklistAtual.playlist3 = true;
+            if (status.playlistAtual >= 4) checklistAtual.playlist4 = true;
+            if (status.playlistAtual >= 5) checklistAtual.playlist5 = true;
+            if (status.progresso >= 100) checklistAtual.finalizado = true;
+
+            atualizarProcesso(jobId, {
+              status: status.progresso >= 100 ? 'finalizado' : 'configurando',
+              titulo: status.titulo,
+              mensagem: status.mensagem,
+              progresso: status.progresso,
+              etapaAtual: status.etapaAtual,
+              totalEtapas: 11,
+              playlistAtual: status.playlistAtual || null,
+              totalPlaylists: status.totalPlaylists || 5,
+              checklist: checklistAtual
+            });
+          }
         });
 
         atualizarProcesso(jobId, {
           status: 'finalizado',
-          mensagem: '✅ Tudo pronto! Seu IB Player foi configurado com sucesso. Agora abra o aplicativo e atualize a lista.',
-          progresso: 100
+          titulo: '✅ Tudo pronto!',
+          mensagem: 'Seu IB Player foi configurado com sucesso. Abra o aplicativo e atualize a lista.',
+          progresso: 100,
+          etapaAtual: 11,
+          totalEtapas: 11,
+          checklist: {
+            teste: true,
+            acesso: true,
+            validacao: true,
+            playlist1: true,
+            playlist2: true,
+            playlist3: true,
+            playlist4: true,
+            playlist5: true,
+            finalizado: true
+          }
         });
 
         console.log(`✅ IB Player configurado com sucesso para MAC: ${mac}`);
@@ -195,8 +243,11 @@ router.post('/', async (req, res) => {
 
         atualizarProcesso(jobId, {
           status: 'erro',
-          mensagem: '⚠️ O teste foi gerado, mas não conseguimos configurar automaticamente o IB Player. Chame o suporte para finalizar.',
-          progresso: 100
+          titulo: '⚠️ Configuração automática falhou',
+          mensagem: 'O teste foi gerado, mas não conseguimos configurar automaticamente o IB Player. Chame o suporte para finalizar.',
+          progresso: 100,
+          etapaAtual: 11,
+          totalEtapas: 11
         });
       }
     })();
