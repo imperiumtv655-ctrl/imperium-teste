@@ -67,33 +67,54 @@ function esconderTodas() {
   document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
 }
 
-function mostrarDispositivos() {
+async function mostrarDispositivos() {
+
   esconderTodas();
-  document.getElementById('telaDispositivos').classList.remove('hidden');
+
+  document
+    .getElementById('telaDispositivos')
+    .classList.remove('hidden');
+
   carregarDispositivos();
+
+  // acorda a Evolution enquanto cliente faz tutorial
+  fetch('/api/evolution/ping')
+    .then(() => console.log('Evolution acordada'))
+    .catch(() => console.log('Evolution iniciando...'));
 }
 
 function carregarDispositivos() {
+
   const lista = document.getElementById('listaDispositivos');
 
   lista.innerHTML = dispositivos.map(item => `
     <button class="card-dispositivo" onclick="abrirTutorial('${item.id}')">
-      <img 
-        src="${item.imagem}" 
-        alt="${item.nome}" 
+
+      <img
+        src="${item.imagem}"
+        alt="${item.nome}"
         class="logo-dispositivo"
         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
       >
-      <div class="icone-fallback" style="display:none;">${item.iconeFallback}</div>
+
+      <div class="icone-fallback" style="display:none;">
+        ${item.iconeFallback}
+      </div>
+
       <strong>${item.nome}</strong>
+
       ${item.desc ? `<span>${item.desc}</span>` : ''}
+
       <small>${item.app}</small>
+
     </button>
   `).join('');
 }
 
 async function abrirTutorial(id) {
+
   try {
+
     const resposta = await fetch(`/api/tutorial/${id}`);
     const dados = await resposta.json();
 
@@ -106,15 +127,22 @@ async function abrirTutorial(id) {
     passoAtual = 0;
 
     esconderTodas();
-    document.getElementById('telaTutorial').classList.remove('hidden');
+
+    document
+      .getElementById('telaTutorial')
+      .classList.remove('hidden');
 
     renderizarPasso();
+
   } catch (error) {
+
     alert('Erro ao carregar tutorial.');
+
   }
 }
 
 function renderizarPasso() {
+
   const passos = tutorialAtual.passos;
   const passo = passos[passoAtual];
 
@@ -127,7 +155,8 @@ function renderizarPasso() {
   document.getElementById('tituloPasso').innerText =
     `${passo.titulo} (${passoAtual + 1} de ${passos.length})`;
 
-  document.getElementById('textoPasso').innerText = passo.texto || '';
+  document.getElementById('textoPasso').innerText =
+    passo.texto || '';
 
   const img = document.getElementById('imagemPasso');
 
@@ -139,10 +168,14 @@ function renderizarPasso() {
     img.removeAttribute('src');
   }
 
-  const porcentagem = ((passoAtual + 1) / passos.length) * 100;
-  document.getElementById('barraProgresso').style.width = `${porcentagem}%`;
+  const porcentagem =
+    ((passoAtual + 1) / passos.length) * 100;
 
-  const btnNaoEncontrei = document.getElementById('btnNaoEncontrei');
+  document.getElementById('barraProgresso').style.width =
+    `${porcentagem}%`;
+
+  const btnNaoEncontrei =
+    document.getElementById('btnNaoEncontrei');
 
   if (passo.mostrarNaoEncontrei) {
     btnNaoEncontrei.classList.remove('hidden');
@@ -150,7 +183,8 @@ function renderizarPasso() {
     btnNaoEncontrei.classList.add('hidden');
   }
 
-  const btnProximo = document.getElementById('btnProximo');
+  const btnProximo =
+    document.getElementById('btnProximo');
 
   if (passoAtual === passos.length - 1) {
     btnProximo.innerText = '✅ Já instalei';
@@ -160,39 +194,61 @@ function renderizarPasso() {
 }
 
 function proximoPasso() {
+
   if (passoAtual < tutorialAtual.passos.length - 1) {
+
     passoAtual++;
     renderizarPasso();
+
   } else {
+
     mostrarFormulario();
+
   }
 }
 
 function passoAnterior() {
+
   if (passoAtual > 0) {
+
     passoAtual--;
     renderizarPasso();
+
   }
 }
 
 function abrirRegiao() {
+
   regiaoAtual = 0;
+
   esconderTodas();
-  document.getElementById('telaRegiao').classList.remove('hidden');
+
+  document
+    .getElementById('telaRegiao')
+    .classList.remove('hidden');
+
   renderizarRegiao();
 }
 
 function renderizarRegiao() {
+
   const passos = tutorialAtual.regiaoPassos || [];
 
   const img = document.getElementById('imagemRegiao');
 
   if (!passos.length) {
-    document.getElementById('tituloRegiao').innerText = 'Ajuda';
+
+    document.getElementById('tituloRegiao').innerText =
+      'Ajuda';
+
     document.getElementById('textoRegiao').innerText =
       'Caso não encontre o aplicativo, entre em contato com nosso suporte.';
+
     img.classList.add('hidden');
-    document.getElementById('barraRegiao').style.width = '100%';
+
+    document.getElementById('barraRegiao').style.width =
+      '100%';
+
     return;
   }
 
@@ -201,41 +257,61 @@ function renderizarRegiao() {
   document.getElementById('tituloRegiao').innerText =
     `${passo.titulo} (${regiaoAtual + 1} de ${passos.length})`;
 
-  document.getElementById('textoRegiao').innerText = passo.texto || '';
+  document.getElementById('textoRegiao').innerText =
+    passo.texto || '';
 
   if (passo.imagem) {
+
     img.src = passo.imagem;
     img.classList.remove('hidden');
+
   } else {
+
     img.classList.add('hidden');
     img.removeAttribute('src');
+
   }
 
-  const porcentagem = ((regiaoAtual + 1) / passos.length) * 100;
-  document.getElementById('barraRegiao').style.width = `${porcentagem}%`;
+  const porcentagem =
+    ((regiaoAtual + 1) / passos.length) * 100;
+
+  document.getElementById('barraRegiao').style.width =
+    `${porcentagem}%`;
 }
 
 function proximaRegiao() {
+
   const passos = tutorialAtual.regiaoPassos || [];
 
   if (regiaoAtual < passos.length - 1) {
+
     regiaoAtual++;
     renderizarRegiao();
+
   } else {
+
     voltarTutorial();
+
   }
 }
 
 function regiaoAnterior() {
+
   if (regiaoAtual > 0) {
+
     regiaoAtual--;
     renderizarRegiao();
+
   }
 }
 
 function mostrarFormulario() {
+
   esconderTodas();
-  document.getElementById('telaFormulario').classList.remove('hidden');
+
+  document
+    .getElementById('telaFormulario')
+    .classList.remove('hidden');
 }
 
 function voltarDispositivos() {
@@ -243,31 +319,64 @@ function voltarDispositivos() {
 }
 
 function voltarTutorial() {
+
   esconderTodas();
-  document.getElementById('telaTutorial').classList.remove('hidden');
+
+  document
+    .getElementById('telaTutorial')
+    .classList.remove('hidden');
+
   renderizarPasso();
 }
 
 document.getElementById('formTeste').addEventListener('submit', async (e) => {
+
   e.preventDefault();
 
-  const resultado = document.getElementById('resultado');
-  resultado.innerHTML = '⏳ Gerando seu teste...';
+  const resultado =
+    document.getElementById('resultado');
 
-  const nomeCliente = document.getElementById('nomeCliente').value;
-  const whatsapp = document.getElementById('whatsapp').value;
-  const tipoTeste = document.getElementById('tipoTeste').value;
+  resultado.innerHTML =
+    '⏳ Ativando seu teste...';
+
+  const nomeCliente =
+    document.getElementById('nomeCliente').value;
+
+  const whatsapp =
+    document.getElementById('whatsapp').value;
+
+  const mac =
+    document.getElementById('mac').value;
+
+  const key =
+    document.getElementById('key').value;
+
+  const tipoTeste =
+    document.getElementById('tipoTeste').value;
 
   try {
+
     const resposta = await fetch('/api/teste', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nomeCliente, whatsapp, tipoTeste })
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nomeCliente,
+        whatsapp,
+        mac,
+        key,
+        tipoTeste
+      })
     });
 
     const dados = await resposta.json();
+
     resultado.innerHTML = dados.mensagem;
+
   } catch {
-    resultado.innerHTML = 'Erro ao gerar teste. Tente novamente.';
+
+    resultado.innerHTML =
+      'Erro ao ativar teste. Tente novamente.';
   }
 });
