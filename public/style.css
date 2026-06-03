@@ -263,6 +263,60 @@ select{
   font-weight:bold;
 }
 
+.aviso-pagamento{
+  background:#3b2503;
+  border:2px solid #f59e0b;
+  color:#fff7ed;
+  border-radius:14px;
+  padding:18px;
+  text-align:center;
+  font-weight:bold;
+  margin:20px 0;
+}
+
+.btn-suporte-mini{
+  display:inline-block;
+  margin-top:12px;
+  background:#22c55e;
+  color:white;
+  text-decoration:none;
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+.suporte-box{
+  margin-top:25px;
+  background:#111827;
+  border:2px solid #22c55e;
+  border-radius:14px;
+  padding:25px;
+  text-align:center;
+}
+
+.numero-suporte{
+  font-size:22px;
+  font-weight:bold;
+  color:#22c55e;
+  margin:20px 0;
+}
+
+.btn-suporte{
+  display:inline-block;
+  text-decoration:none;
+  background:#22c55e;
+  color:white;
+  padding:15px 25px;
+  border-radius:10px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.btn-suporte:hover,
+.btn-suporte-mini:hover{
+  opacity:0.9;
+}
+
 #resultado{
   margin-top:20px;
   text-align:center;
