@@ -257,6 +257,7 @@ function mostrarFormulario() {
   etapaFormulario = 0;
 
   document.getElementById('resultado').innerHTML = '';
+
   document.getElementById('telaFormulario').classList.remove('hidden');
 
   renderizarEtapaFormulario();
@@ -268,6 +269,7 @@ function renderizarEtapaFormulario() {
     'etapaKey',
     'etapaNome',
     'etapaWhatsapp',
+    'etapaTipoTeste',
     'etapaConfirmacao'
   ];
 
@@ -287,6 +289,22 @@ function renderizarEtapaFormulario() {
     atualizarResumo();
   } else {
     btn.innerText = 'Próximo →';
+  }
+}
+
+function selecionarTipoTeste(tipo) {
+  document.getElementById('tipoTeste').value = tipo;
+
+  const btnSemAdulto = document.getElementById('btnSemAdulto');
+  const btnComAdulto = document.getElementById('btnComAdulto');
+
+  btnSemAdulto.classList.remove('ativo');
+  btnComAdulto.classList.remove('ativo');
+
+  if (tipo === 'sem_adulto') {
+    btnSemAdulto.classList.add('ativo');
+  } else {
+    btnComAdulto.classList.add('ativo');
   }
 }
 
@@ -316,7 +334,7 @@ function avancarEtapaFormulario() {
     return;
   }
 
-  if (etapaFormulario < 4) {
+  if (etapaFormulario < 5) {
     etapaFormulario++;
     renderizarEtapaFormulario();
   } else {
@@ -334,6 +352,8 @@ function voltarEtapaFormulario() {
 }
 
 function atualizarResumo() {
+  const tipo = document.getElementById('tipoTeste').value;
+
   document.getElementById('resumoMac').innerText =
     document.getElementById('mac').value.trim();
 
@@ -345,6 +365,9 @@ function atualizarResumo() {
 
   document.getElementById('resumoWhatsapp').innerText =
     document.getElementById('whatsapp').value.trim();
+
+  document.getElementById('resumoTipoTeste').innerText =
+    tipo === 'com_adulto' ? 'Com Adulto 🔞' : 'Sem Adulto';
 }
 
 async function enviarTeste() {
