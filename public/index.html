@@ -12,7 +12,7 @@
 
   <section id="telaBoasVindas">
     <h1>🎉 Bem-vindo à Imperium TV</h1>
-    <p>Antes de gerar seu teste grátis, vamos instalar o aplicativo correto.</p>
+    <p>Antes de ativar seu teste grátis, vamos instalar o aplicativo correto.</p>
     <p>⏱️ Leva menos de 2 minutos.</p>
     <button class="btn-principal" onclick="mostrarDispositivos()">COMEÇAR</button>
   </section>
@@ -72,19 +72,22 @@
   <section id="telaFormulario" class="hidden">
     <button class="btn-voltar" onclick="voltarTutorial()">← Voltar</button>
 
-    <h2>✅ Agora vamos gerar seu teste</h2>
-    <p>Preencha seus dados para receber usuário e senha no WhatsApp.</p>
+    <h2>✅ Agora vamos ativar seu teste</h2>
+    <p>Preencha os dados abaixo para ativarmos seu aplicativo IB Player.</p>
 
     <form id="formTeste">
       <input type="text" id="nomeCliente" placeholder="Seu nome" required>
       <input type="text" id="whatsapp" placeholder="WhatsApp" required>
+
+      <input type="text" id="mac" placeholder="MAC do aplicativo IB Player" required>
+      <input type="text" id="key" placeholder="KEY do aplicativo IB Player" required>
 
       <select id="tipoTeste">
         <option value="sem_adulto">Sem Adulto</option>
         <option value="com_adulto">Com Adulto 🔞</option>
       </select>
 
-      <button type="submit" class="btn-principal">GERAR TESTE</button>
+      <button type="submit" class="btn-principal">ATIVAR TESTE</button>
     </form>
 
     <div id="resultado"></div>
