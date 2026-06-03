@@ -124,7 +124,8 @@ button{
 }
 
 #barraProgresso,
-#barraRegiao{
+#barraRegiao,
+#barraFormulario{
   height:100%;
   width:0%;
   background:#22c55e;
@@ -170,6 +171,37 @@ select{
   box-sizing:border-box;
 }
 
+.botoes-tipo-teste{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:15px;
+}
+
+.btn-tipo{
+  background:#374151;
+  color:white;
+  border:2px solid transparent;
+}
+
+.btn-tipo.ativo{
+  background:#22c55e;
+  border-color:#86efac;
+  color:white;
+}
+
+.resumo-box{
+  background:#1f2937;
+  border:1px solid #374151;
+  border-radius:12px;
+  padding:15px;
+  text-align:left;
+}
+
+.resumo-box p{
+  margin:8px 0;
+}
+
 #resultado{
   margin-top:20px;
   text-align:center;
@@ -184,7 +216,8 @@ select{
     padding:20px;
   }
 
-  .botoes{
+  .botoes,
+  .botoes-tipo-teste{
     grid-template-columns:1fr;
   }
 }
