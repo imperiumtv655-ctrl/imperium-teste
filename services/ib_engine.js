@@ -6,12 +6,20 @@ module.exports = async (pedidos, config = {}) => {
   if (!pedidos || !Array.isArray(pedidos)) return null;
 
   const pedido = pedidos.find(p => p.status === "processando");
-
   if (!pedido) return null;
+
+  const atualizar = config.onUpdate || (() => {});
 
   let browser;
 
   try {
+    atualizar({
+      titulo: "📡 Acessando IB Player",
+      mensagem: "Estamos acessando o painel do aplicativo. Mantenha a TV desligada ou o app fechado.",
+      progresso: 45,
+      etapaAtual: 2
+    });
+
     browser = await puppeteer.launch({
       args: [
         ...chromium.args,
@@ -37,8 +45,7 @@ module.exports = async (pedidos, config = {}) => {
       .sort(() => 0.5 - Math.random())
       .slice(0, 5);
 
-    pedido.mensagem =
-      "📡 ACESSANDO PAINEL... DESLIGUE A TV E AGUARDE!";
+    pedido.mensagem = "📡 ACESSANDO PAINEL...";
 
     await page.goto(
       "https://iboproapp.com/manage-playlists/login/",
@@ -47,6 +54,13 @@ module.exports = async (pedidos, config = {}) => {
         timeout: 60000
       }
     );
+
+    atualizar({
+      titulo: "🔐 Validando MAC e KEY",
+      mensagem: "Estamos validando os dados do seu aplicativo IB Player.",
+      progresso: 55,
+      etapaAtual: 3
+    });
 
     await page.waitForSelector("#mac_address", {
       timeout: 30000
@@ -66,17 +80,44 @@ module.exports = async (pedidos, config = {}) => {
       timeout: 45000
     });
 
+    atualizar({
+      titulo: "✅ IB Player acessado",
+      mensagem: "Acesso confirmado. Agora vamos adicionar as playlists.",
+      progresso: 60,
+      etapaAtual: 4
+    });
+
     for (let i = 0; i < dnsSorteados.length; i++) {
-      const nomeLista = `IMPTV${i + 1}`;
+      const numeroPlaylist = i + 1;
+      const totalPlaylists = dnsSorteados.length;
+      const nomeLista = `IMPTV${numeroPlaylist}`;
+
+      atualizar({
+        titulo: `📝 Adicionando playlist ${numeroPlaylist} de ${totalPlaylists}`,
+        mensagem: `Estamos gravando a lista ${nomeLista}. Não feche esta página.`,
+        progresso: 60 + numeroPlaylist * 6,
+        etapaAtual: 4 + numeroPlaylist,
+        playlistAtual: numeroPlaylist,
+        totalPlaylists
+      });
 
       const jaExiste = await page.evaluate((nome) => {
         const celulas = Array.from(document.querySelectorAll("td"));
-
         return celulas.some(td => td.innerText.trim() === nome);
       }, nomeLista);
 
       if (jaExiste) {
         console.log(`⚠️ ${nomeLista} já existe. Pulando...`);
+
+        atualizar({
+          titulo: `✅ Playlist ${numeroPlaylist} já existia`,
+          mensagem: `${nomeLista} já estava cadastrada. Continuando...`,
+          progresso: 60 + numeroPlaylist * 6,
+          etapaAtual: 4 + numeroPlaylist,
+          playlistAtual: numeroPlaylist,
+          totalPlaylists
+        });
+
         continue;
       }
 
@@ -85,8 +126,7 @@ module.exports = async (pedidos, config = {}) => {
       const urlFinal =
         `${baseDns}/get.php?username=${pedido.user}&password=${pedido.pass}&type=m3u_plus&output=mpegts`;
 
-      pedido.mensagem =
-        `📝 GRAVANDO ${nomeLista}... MANTENHA A TV DESLIGADA!`;
+      pedido.mensagem = `📝 GRAVANDO ${nomeLista}...`;
 
       await page.evaluate(() => {
         const btnAdd = Array.from(document.querySelectorAll("button"))
@@ -130,22 +170,43 @@ module.exports = async (pedidos, config = {}) => {
       await page.waitForSelector("button.btn-secondary", {
         timeout: 20000
       });
+
+      atualizar({
+        titulo: `✅ Playlist ${numeroPlaylist} adicionada`,
+        mensagem: `${nomeLista} foi adicionada com sucesso.`,
+        progresso: 60 + numeroPlaylist * 6,
+        etapaAtual: 4 + numeroPlaylist,
+        playlistAtual: numeroPlaylist,
+        totalPlaylists
+      });
     }
 
-    pedido.mensagem =
-      "✅ PROCESSO FINALIZADO! PODE LIGAR A TV.";
+    atualizar({
+      titulo: "🔄 Finalizando configuração",
+      mensagem: "Estamos finalizando os últimos ajustes no seu aplicativo.",
+      progresso: 95,
+      etapaAtual: 10
+    });
 
+    pedido.mensagem = "✅ PROCESSO FINALIZADO! PODE LIGAR A TV.";
     pedido.status = "ok";
+
+    atualizar({
+      titulo: "✅ Tudo pronto!",
+      mensagem: "Seu IB Player foi configurado com sucesso. Abra o aplicativo e atualize a lista.",
+      progresso: 100,
+      etapaAtual: 11
+    });
 
     if (config.manterAberto) {
       return {
         browser,
         page
       };
-    } else {
-      await browser.close();
-      return null;
     }
+
+    await browser.close();
+    return null;
 
   } catch (err) {
     if (browser) {
