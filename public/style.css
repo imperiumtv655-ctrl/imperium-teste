@@ -3,6 +3,7 @@ body{
   background:#111827;
   color:white;
   font-family:Arial, Helvetica, sans-serif;
+  padding-bottom:80px;
 }
 
 .container{
@@ -34,6 +35,51 @@ button{
 
 .hidden{
   display:none !important;
+}
+
+.botao-suporte-fixo{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:9999;
+  background:#22c55e;
+  color:white;
+  text-decoration:none;
+  padding:14px 18px;
+  border-radius:999px;
+  font-weight:bold;
+  box-shadow:0 8px 20px rgba(0,0,0,0.35);
+}
+
+.alerta-box,
+.termos-box{
+  background:#111827;
+  border:2px solid #f59e0b;
+  border-radius:14px;
+  padding:22px;
+  margin-top:20px;
+}
+
+.termos-box{
+  border-color:#22c55e;
+}
+
+.check-termos{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:20px;
+  font-weight:bold;
+}
+
+.check-termos input{
+  width:auto;
+  margin:0;
+}
+
+#btnAceitarTermos:disabled{
+  opacity:0.45;
+  cursor:not-allowed;
 }
 
 .grid-dispositivos{
@@ -313,7 +359,8 @@ select{
 }
 
 .btn-suporte:hover,
-.btn-suporte-mini:hover{
+.btn-suporte-mini:hover,
+.botao-suporte-fixo:hover{
   opacity:0.9;
 }
 
@@ -334,5 +381,12 @@ select{
   .botoes,
   .botoes-tipo-teste{
     grid-template-columns:1fr;
+  }
+
+  .botao-suporte-fixo{
+    left:15px;
+    right:15px;
+    bottom:15px;
+    text-align:center;
   }
 }
