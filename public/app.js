@@ -69,6 +69,23 @@ function esconderTodas() {
   document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
 }
 
+function mostrarTermos() {
+  esconderTodas();
+  document.getElementById('telaTermos').classList.remove('hidden');
+}
+
+function toggleBotaoTermos() {
+  const check = document.getElementById('aceiteTermos');
+  const btn = document.getElementById('btnAceitarTermos');
+
+  btn.disabled = !check.checked;
+}
+
+function aceitarTermos() {
+  esconderTodas();
+  document.getElementById('telaBoasVindas').classList.remove('hidden');
+}
+
 function mostrarDispositivos() {
   esconderTodas();
   document.getElementById('telaDispositivos').classList.remove('hidden');
