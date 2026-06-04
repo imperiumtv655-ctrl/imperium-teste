@@ -8,9 +8,78 @@
 </head>
 <body>
 
+<a href="https://wa.me/5544988214771" target="_blank" class="botao-suporte-fixo">
+  💬 Suporte Oficial
+</a>
+
 <div class="container">
 
-  <section id="telaBoasVindas">
+  <section id="telaAntigolpe">
+    <h1>🛡️ Aviso de Segurança</h1>
+
+    <div class="alerta-box">
+      <p>
+        Antes de continuar, confirme se este link foi enviado pelo suporte oficial da
+        <strong>Imperium TV</strong> ou por alguém de confiança.
+      </p>
+
+      <p>
+        Em caso de dúvida, fale diretamente com nosso WhatsApp oficial:
+      </p>
+
+      <p class="numero-suporte">📱 (44) 98821-4771</p>
+
+      <a href="https://wa.me/5544988214771" target="_blank" class="btn-suporte">
+        💬 Confirmar com suporte oficial
+      </a>
+    </div>
+
+    <button class="btn-principal" onclick="mostrarTermos()">CONTINUAR</button>
+  </section>
+
+  <section id="telaTermos" class="hidden">
+    <h1>📄 Termos de Uso do Teste</h1>
+
+    <div class="termos-box">
+      <p>
+        Nosso sistema trabalha no modelo <strong>pré-pago</strong>, sem compromisso mensal obrigatório.
+        Você paga somente quando quiser utilizar o serviço.
+      </p>
+
+      <p>
+        O valor do plano mensal é de <strong>R$ 19,90</strong>.
+      </p>
+
+      <p>
+        O aplicativo <strong>IB Player Pro</strong> possui uma ativação anual no valor de
+        <strong>R$ 10,00</strong>. Esse valor é cobrado uma vez ao ano e não faz parte da fatura mensal do plano.
+      </p>
+
+      <p>
+        A ativação anual do IB Player Pro é paga junto com a primeira fatura do cliente.
+      </p>
+
+      <p>
+        Após a contratação, não realizamos devolução de valores, pois o teste gratuito é disponibilizado antes
+        justamente para o cliente verificar se deseja contratar o serviço.
+      </p>
+
+      <p>
+        Qualquer pagamento deve ser confirmado e realizado somente com o suporte oficial da Imperium TV.
+      </p>
+
+      <label class="check-termos">
+        <input type="checkbox" id="aceiteTermos" onchange="toggleBotaoTermos()">
+        Li e aceito os termos acima.
+      </label>
+    </div>
+
+    <button id="btnAceitarTermos" class="btn-principal" onclick="aceitarTermos()" disabled>
+      ACEITAR E COMEÇAR
+    </button>
+  </section>
+
+  <section id="telaBoasVindas" class="hidden">
     <h1>🎉 Bem-vindo à Imperium TV</h1>
     <p>Antes de ativar seu teste grátis, vamos instalar o aplicativo correto.</p>
     <p>⏱️ Leva menos de 2 minutos.</p>
@@ -187,18 +256,14 @@
       <div class="suporte-box">
         <h3>🛡️ Aviso Antigolpe</h3>
 
-        <p>
-          Este teste pertence à <strong>Imperium TV</strong>.
-        </p>
+        <p>Este teste pertence à <strong>Imperium TV</strong>.</p>
 
         <p>
           Antes de efetuar qualquer pagamento ou contratação,
           confirme diretamente conosco pelo WhatsApp oficial.
         </p>
 
-        <p class="numero-suporte">
-          📱 (44) 98821-4771
-        </p>
+        <p class="numero-suporte">📱 (44) 98821-4771</p>
 
         <a href="https://wa.me/5544988214771" target="_blank" class="btn-suporte">
           💬 FALAR COM SUPORTE OFICIAL
