@@ -1,4 +1,3 @@
-
 module.exports = {
   id: 'androidtv',
   dispositivo: 'Android TV',
@@ -40,39 +39,40 @@ module.exports = {
   ],
 
   regiaoPassos: [
-  {
-    titulo: 'Downloader - Passo 1',
-    texto: 'Se não encontrou o IB Player na Play Store, pesquise por Downloader e instale o aplicativo.',
-    imagem: 'imagens/tutorial/androidtv/regiao/regiao1.png'
-  },
-  {
-    titulo: 'Downloader - Passo 2',
-    texto: 'Após instalar, abra o aplicativo Downloader.',
-    imagem: 'imagens/tutorial/androidtv/regiao/regiao2.png'
-  },
-  {
-    titulo: 'Downloader - Passo 3',
-    texto: 'Na tela inicial do Downloader, digite o código 481220 e clique em Go ou Ir.',
-    imagem: 'imagens/tutorial/androidtv/regiao/regiao3.png'
-  },
-  {
-    titulo: 'Downloader - Passo 4',
-    texto: 'Aguarde o download do IB Player terminar.',
-    imagem: 'imagens/tutorial/androidtv/regiao/regiao4.png'
-  },
-  {
-    titulo: 'Downloader - Passo 5',
-    texto: 'Clique em Install ou Instalar para instalar o IB Player.',
-    imagem: 'imagens/tutorial/androidtv/regiao/regiao5.png'
-  },
-  {
-    titulo: 'Downloader - Passo 6',
-    texto: 'Depois de instalar, clique em Open ou Abrir.',
-    imagem: 'imagens/tutorial/androidtv/regiao/regiao6.png'
-  },
-  {
-    titulo: 'Downloader - Passo 7',
-    texto: 'Anote o MAC Address e a KEY que aparecem na tela.',
-    imagem: 'imagens/tutorial/androidtv/regiao/regiao7.png'
-  }
-]
+    {
+      titulo: 'Downloader - Passo 1',
+      texto: 'Se não encontrou o IB Player na Play Store, pesquise por Downloader e instale o aplicativo.',
+      imagem: 'imagens/tutorial/androidtv/regiao/regiao1.png'
+    },
+    {
+      titulo: 'Downloader - Passo 2',
+      texto: 'Após instalar, abra o aplicativo Downloader.',
+      imagem: 'imagens/tutorial/androidtv/regiao/regiao2.png'
+    },
+    {
+      titulo: 'Downloader - Passo 3',
+      texto: 'Na tela inicial do Downloader, digite o código 481220 e clique em Go ou Ir.',
+      imagem: 'imagens/tutorial/androidtv/regiao/regiao3.png'
+    },
+    {
+      titulo: 'Downloader - Passo 4',
+      texto: 'Aguarde o download do IB Player terminar.',
+      imagem: 'imagens/tutorial/androidtv/regiao/regiao4.png'
+    },
+    {
+      titulo: 'Downloader - Passo 5',
+      texto: 'Clique em Install ou Instalar para instalar o IB Player.',
+      imagem: 'imagens/tutorial/androidtv/regiao/regiao5.png'
+    },
+    {
+      titulo: 'Downloader - Passo 6',
+      texto: 'Depois de instalar, clique em Open ou Abrir.',
+      imagem: 'imagens/tutorial/androidtv/regiao/regiao6.png'
+    },
+    {
+      titulo: 'Downloader - Passo 7',
+      texto: 'Anote o MAC Address e a KEY que aparecem na tela.',
+      imagem: 'imagens/tutorial/androidtv/regiao/regiao7.png'
+    }
+  ]
+};
