@@ -2,21 +2,21 @@ const dispositivos = [
   {
     id: 'samsung',
     nome: 'Samsung TV',
-    imagem: 'imagens/dispositivos/samsung.png',
+    imagem: 'imagens/icones/samsung.png',
     iconeFallback: '📺',
     app: 'IB Player Pro'
   },
   {
     id: 'lg',
     nome: 'LG TV',
-    imagem: 'imagens/dispositivos/lg.png',
+    imagem: 'imagens/icones/lg.png',
     iconeFallback: '📺',
     app: 'IB Player Pro'
   },
   {
     id: 'androidtv',
     nome: 'Android TV',
-    imagem: 'imagens/dispositivos/androidtv.png',
+    imagem: 'imagens/icones/androidtv.png',
     iconeFallback: '📺',
     app: 'IB Player Pro',
     desc: 'TCL, Philips, Philco, AOC, Sony, Toshiba, Xiaomi...'
@@ -24,7 +24,7 @@ const dispositivos = [
   {
     id: 'roku',
     nome: 'Roku TV',
-    imagem: 'imagens/dispositivos/roku.png',
+    imagem: 'imagens/icones/roku.png',
     iconeFallback: '🟣',
     app: 'IB Player Pro',
     desc: 'AOC Roku, Philco Roku, TCL Roku e dispositivos Roku'
@@ -32,28 +32,28 @@ const dispositivos = [
   {
     id: 'firetv',
     nome: 'Fire TV',
-    imagem: 'imagens/dispositivos/firetv.png',
+    imagem: 'imagens/icones/firetvstick.png',
     iconeFallback: '🔥',
     app: 'IB Player Pro'
   },
   {
     id: 'tvbox',
     nome: 'TV Box',
-    imagem: 'imagens/dispositivos/tvbox.png',
+    imagem: 'imagens/icones/tvbox.png',
     iconeFallback: '📦',
     app: 'IB Player Pro'
   },
   {
     id: 'android',
     nome: 'Android',
-    imagem: 'imagens/dispositivos/android.png',
+    imagem: 'imagens/icones/androidmobile.png',
     iconeFallback: '📱',
     app: 'IB Player Pro'
   },
   {
     id: 'iphone',
     nome: 'iPhone',
-    imagem: 'imagens/dispositivos/iphone.png',
+    imagem: 'imagens/icones/ios.png',
     iconeFallback: '🍎',
     app: 'IB Player Pro'
   }
