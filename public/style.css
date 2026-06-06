@@ -37,6 +37,22 @@ button{
   display:none !important;
 }
 
+.logo-principal{
+  display:block;
+  margin:0 auto 20px auto;
+  max-width:260px;
+  width:100%;
+  height:auto;
+}
+
+.logo-topo{
+  display:block;
+  margin:15px auto 20px auto;
+  max-width:180px;
+  width:100%;
+  height:auto;
+}
+
 .botao-suporte-fixo{
   position:fixed;
   right:18px;
@@ -388,5 +404,13 @@ select{
     right:15px;
     bottom:15px;
     text-align:center;
+  }
+
+  .logo-principal{
+    max-width:180px;
+  }
+
+  .logo-topo{
+    max-width:140px;
   }
 }
