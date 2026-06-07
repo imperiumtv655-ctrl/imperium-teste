@@ -386,38 +386,6 @@ select{
   font-weight:bold;
 }
 
-@media(max-width:600px){
-  .container{
-    margin:0;
-    border-radius:0;
-    min-height:100vh;
-    padding:20px;
-  }
-
-  .botoes,
-  .botoes-tipo-teste{
-    grid-template-columns:1fr;
-  }
-
-  .botao-suporte-fixo{
-    left:15px;
-    right:15px;
-    bottom:15px;
-    text-align:center;
-  }
-
-  .logo-principal{
-    max-width:180px;
-  }
-
-  .logo-topo{
-    max-width:140px;
-  }
-.botao-loja-tutorial{
-  margin-top:15px;
-  text-align:center;
-}
-
 .botao-loja-tutorial{
   margin-top:15px;
   text-align:center;
