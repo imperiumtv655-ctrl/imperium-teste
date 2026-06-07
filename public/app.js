@@ -51,7 +51,7 @@ const dispositivos = [
   app: 'IB Player'
 },
 {
-  id: 'ios',
+  id: 'iphone',
   nome: 'iPhone',
   imagem: 'imagens/icones/ios.png',
   iconeFallback: '🍎',
