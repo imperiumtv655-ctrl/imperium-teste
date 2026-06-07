@@ -418,6 +418,11 @@ select{
   text-align:center;
 }
 
+.botao-loja-tutorial{
+  margin-top:15px;
+  text-align:center;
+}
+
 .btn-link-loja{
   display:inline-block;
   background:#22c55e;
@@ -432,7 +437,8 @@ select{
 .btn-link-loja:hover{
   opacity:0.9;
 }
-}@media(max-width:600px){
+
+@media(max-width:600px){
   .container{
     margin:0;
     border-radius:0;
