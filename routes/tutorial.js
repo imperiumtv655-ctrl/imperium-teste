@@ -8,7 +8,7 @@ const tutoriais = {
   androidtv: require('../tutoriais/androidtv'),
   firetv: require('../tutoriais/firetv'),
   tvbox: require('../tutoriais/tvbox'),
-  android: require('../tutoriais/android'),
+  android: require('../tutoriais/androidmobile'),
   iphone: require('../tutoriais/iphone')
 };
 
