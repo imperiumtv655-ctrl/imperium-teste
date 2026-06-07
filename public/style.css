@@ -413,4 +413,15 @@ select{
   .logo-topo{
     max-width:140px;
   }
+
+  .btn-link-loja{
+  display:inline-block;
+  background:#22c55e;
+  color:white;
+  text-decoration:none;
+  padding:14px 22px;
+  border-radius:10px;
+  font-weight:bold;
+  margin-top:10px;
+}
 }
