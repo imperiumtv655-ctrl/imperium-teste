@@ -138,25 +138,9 @@ async function abrirTutorial(id) {
   } catch (error) {
     alert('Erro ao carregar tutorial.');
   }
-}
+}  
 
-function renderizarPasso() {
-  const passos = tutorialAtual.passos;
-  const passo = passos[passoAtual];
-
-  document.getElementById('tituloTutorial').innerText =
-    `${tutorialAtual.icone || ''} ${tutorialAtual.dispositivo}`;
-
-  document.getElementById('appTutorial').innerText =
-    `Aplicativo: ${tutorialAtual.app}`;
-
-  document.getElementById('tituloPasso').innerText =
-    `${passo.titulo} (${passoAtual + 1} de ${passos.length})`;
-
-  document.getElementById('textoPasso').innerHTML =
-  `${passo.texto || ''}${montarBotaoLoja(passo)}`;
-
-  function montarBotaoLoja(passo) {
+    function montarBotaoLoja(passo) {
   if (passo.linkPlayStore) {
     return `
       <br><br>
@@ -176,6 +160,24 @@ function renderizarPasso() {
   }
 
   return '';
+
+function renderizarPasso() {
+  const passos = tutorialAtual.passos;
+  const passo = passos[passoAtual];
+
+  document.getElementById('tituloTutorial').innerText =
+    `${tutorialAtual.icone || ''} ${tutorialAtual.dispositivo}`;
+
+  document.getElementById('appTutorial').innerText =
+    `Aplicativo: ${tutorialAtual.app}`;
+
+  document.getElementById('tituloPasso').innerText =
+    `${passo.titulo} (${passoAtual + 1} de ${passos.length})`;
+
+  document.getElementById('textoPasso').innerHTML =
+  `${passo.texto || ''}${montarBotaoLoja(passo)}`;
+
+
 }
   const img = document.getElementById('imagemPasso');
 
