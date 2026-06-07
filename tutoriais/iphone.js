@@ -1,6 +1,6 @@
 
 module.exports = {
-  id: 'ios',
+  id: 'iphone',
   dispositivo: 'iPhone',
   icone: '🍎',
   app: 'IBO Pro Player',
