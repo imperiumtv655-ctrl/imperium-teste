@@ -44,19 +44,19 @@ const dispositivos = [
     app: 'IB Player Pro'
   },
   {
-  id: 'androidmobile',
-  nome: 'Android',
-  imagem: 'imagens/icones/androidmobile.png',
-  iconeFallback: '📱',
-  app: 'IB Player'
-},
-{
-  id: 'iphone',
-  nome: 'iPhone',
-  imagem: 'imagens/icones/ios.png',
-  iconeFallback: '🍎',
-  app: 'IBO Pro Player'
-}
+    id: 'androidmobile',
+    nome: 'Android',
+    imagem: 'imagens/icones/androidmobile.png',
+    iconeFallback: '📱',
+    app: 'IB Player'
+  },
+  {
+    id: 'iphone',
+    nome: 'iPhone',
+    imagem: 'imagens/icones/ios.png',
+    iconeFallback: '🍎',
+    app: 'IBO Pro Player'
+  }
 ];
 
 let tutorialAtual = null;
@@ -138,28 +138,31 @@ async function abrirTutorial(id) {
   } catch (error) {
     alert('Erro ao carregar tutorial.');
   }
-}  
+}
 
-    function montarBotaoLoja(passo) {
+function montarBotaoLoja(passo) {
   if (passo.linkPlayStore) {
     return `
-      <br><br>
-      <a href="${passo.linkPlayStore}" target="_blank" class="btn-link-loja">
-        📲 ABRIR PLAY STORE
-      </a>
+      <div id="botaoLojaTutorial" class="botao-loja-tutorial">
+        <a href="${passo.linkPlayStore}" target="_blank" class="btn-link-loja">
+          📲 ABRIR PLAY STORE
+        </a>
+      </div>
     `;
   }
 
   if (passo.linkAppStore) {
     return `
-      <br><br>
-      <a href="${passo.linkAppStore}" target="_blank" class="btn-link-loja">
-        🍎 ABRIR APP STORE
-      </a>
+      <div id="botaoLojaTutorial" class="botao-loja-tutorial">
+        <a href="${passo.linkAppStore}" target="_blank" class="btn-link-loja">
+          🍎 ABRIR APP STORE
+        </a>
+      </div>
     `;
   }
 
   return '';
+}
 
 function renderizarPasso() {
   const passos = tutorialAtual.passos;
@@ -174,11 +177,8 @@ function renderizarPasso() {
   document.getElementById('tituloPasso').innerText =
     `${passo.titulo} (${passoAtual + 1} de ${passos.length})`;
 
-  document.getElementById('textoPasso').innerHTML =
-  `${passo.texto || ''}${montarBotaoLoja(passo)}`;
+  document.getElementById('textoPasso').innerHTML = passo.texto || '';
 
-
-}
   const img = document.getElementById('imagemPasso');
 
   if (passo.imagem) {
@@ -187,6 +187,18 @@ function renderizarPasso() {
   } else {
     img.classList.add('hidden');
     img.removeAttribute('src');
+  }
+
+  const botaoExistente = document.getElementById('botaoLojaTutorial');
+
+  if (botaoExistente) {
+    botaoExistente.remove();
+  }
+
+  const htmlBotao = montarBotaoLoja(passo);
+
+  if (htmlBotao) {
+    img.insertAdjacentHTML('afterend', htmlBotao);
   }
 
   const porcentagem = ((passoAtual + 1) / passos.length) * 100;
@@ -238,8 +250,13 @@ function renderizarRegiao() {
 
   if (!passos.length) {
     document.getElementById('tituloRegiao').innerText = 'Ajuda';
-    document.getElementById('textoRegiao').innerText =
-      'Caso não encontre o aplicativo, entre em contato com nosso suporte.';
+    document.getElementById('textoRegiao').innerHTML = `
+      Caso não encontre o aplicativo, entre em contato com nosso suporte.
+      <br><br>
+      <a href="https://wa.me/5544988214771" target="_blank" class="btn-link-loja">
+        💬 FALAR COM SUPORTE
+      </a>
+    `;
 
     img.classList.add('hidden');
     document.getElementById('barraRegiao').style.width = '100%';
