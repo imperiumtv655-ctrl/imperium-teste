@@ -44,19 +44,19 @@ const dispositivos = [
     app: 'IB Player Pro'
   },
   {
-    id: 'android',
-    nome: 'Android',
-    imagem: 'imagens/icones/androidmobile.png',
-    iconeFallback: '📱',
-    app: 'IB Player Pro'
-  },
-  {
-    id: 'iphone',
-    nome: 'iPhone',
-    imagem: 'imagens/icones/ios.png',
-    iconeFallback: '🍎',
-    app: 'IB Player Pro'
-  }
+  id: 'androidmobile',
+  nome: 'Android',
+  imagem: 'imagens/icones/androidmobile.png',
+  iconeFallback: '📱',
+  app: 'IB Player'
+},
+{
+  id: 'ios',
+  nome: 'iPhone',
+  imagem: 'imagens/icones/ios.png',
+  iconeFallback: '🍎',
+  app: 'IBO Pro Player'
+}
 ];
 
 let tutorialAtual = null;
@@ -153,8 +153,30 @@ function renderizarPasso() {
   document.getElementById('tituloPasso').innerText =
     `${passo.titulo} (${passoAtual + 1} de ${passos.length})`;
 
-  document.getElementById('textoPasso').innerText = passo.texto || '';
+  document.getElementById('textoPasso').innerHTML =
+  `${passo.texto || ''}${montarBotaoLoja(passo)}`;
 
+  function montarBotaoLoja(passo) {
+  if (passo.linkPlayStore) {
+    return `
+      <br><br>
+      <a href="${passo.linkPlayStore}" target="_blank" class="btn-link-loja">
+        📲 ABRIR PLAY STORE
+      </a>
+    `;
+  }
+
+  if (passo.linkAppStore) {
+    return `
+      <br><br>
+      <a href="${passo.linkAppStore}" target="_blank" class="btn-link-loja">
+        🍎 ABRIR APP STORE
+      </a>
+    `;
+  }
+
+  return '';
+}
   const img = document.getElementById('imagemPasso');
 
   if (passo.imagem) {
